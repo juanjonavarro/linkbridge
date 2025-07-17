@@ -1,0 +1,19 @@
+{
+  "name": "linkbridge",
+  "version": "1.0.0",
+  "main": "newtab.js",
+  "scripts": {    
+    "build": "vite build --mode prod",
+    "dev": "vite build --mode dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "vite": "^7.0.4"
+  },
+  "dependencies": {
+    "bootstrap-icons": "^1.13.1"
+  }
+}

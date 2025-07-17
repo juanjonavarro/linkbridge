@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>.</title>
+  <link rel="icon" href="/images/icon.ico" type="image/png">
+</head>
+<body>
+    <div id="app">
+        <div id="config-zone" class="config-element">
+            <h1>Configuration</h1>
+            <div class="config-group" id="config-options-group">
+                <input type="checkbox" id="open-in-new-tab" class="config-input"/>
+                <label for="open-in-new-tab" class="config-label">Open links in new tab</label>
+            </div>
+            <div class="config-group" id="config-options-group">
+                <label for="config-page-title" class="config-label">Page Title:</label>
+                <input type="text" id="config-page-title" class="config-input"/>                
+            </div>
+            <div class="config-group" id="theme-group">
+                <h2>Theme</h2>
+                <div id="theme-selector">
+                </div>
+            </div>
+            <div class="config-group" id="import-export-group">
+                <button id="export-links" class="config-button primary">Export Links</button>
+                <button id="import-links" class="config-button primary">Import Links</button>
+            </div>
+        </div>
+
+        <div id="app-zone">
+            <div id="applications-list">
+            </div>  
+            
+            <h1 id="bookmarks-title"><span>Bookmarks</span> <a href="#" title="Add new group" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a></h1>
+            <div id="bookmarks-list">            
+            </div>   
+        </div>
+        
+        <a id="config-button"><i class="bi bi-gear-fill"></i></a>
+    </div>  
+    
+    <dialog id="edit-link-dialog">
+        <form method="dialog" id="edit-link-form">
+            <h2>Edit link</h2>
+            <input type="text" class="dialog-input" id="edit-link-name" placeholder="Title" required>
+            <input type="text" class="dialog-input" id="edit-link-url" placeholder="URL" required>   
+            <div id="edit-link-icon-group">
+                <div id="current-icon-container" class="current-icon-container" style="display: none;">
+                    <img id="current-icon-preview" src="" alt="Current Icon">
+                    <a id="remove-icon-button" class="remove-icon-button" href="">&times;</a>
+                </div>       
+                <div id="current-icon-placeholder" class="current-icon-placeholder" style="display: none;">
+                </div>
+                <input type="file" id="edit-link-icon-file" accept="image/png, image/jpeg, image/gif, image/x-icon" class="dialog-input">
+            </div>         
+            <div class="dialog-buttons-group">
+                <button class="primary" id="edit-link-save" type="button" value="save">Save</button>
+                <button id="edit-link-cancel" type="button">Cancel</button>
+                <button class="warning" id="edit-link-delete" type="button">Delete</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="edit-group-dialog">
+        <form method="dialog" id="edit-group-form">
+            <h2>Edit group</h2>
+            <input type="text" class="dialog-input" id="edit-group-name" placeholder="Group Name" required>
+            <div class="dialog-buttons-group">
+                <button class="primary" id="edit-group-save" type="button" value="save">Save</button>
+                <button id="edit-group-cancel" type="button">Cancel</button>
+                <button class="warning" id="edit-group-delete" type="button">Delete</button>
+            </div>
+        </form>
+    </dialog>
+
+  <script type="module" src="./js/newtab.js"></script>
+</body>
+</html>
