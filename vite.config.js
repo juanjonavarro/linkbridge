@@ -7,17 +7,17 @@ export default defineConfig(({ mode }) => {
   return {
     build: {
       outDir: 'dist',
-      sourcemap: true, 
+      sourcemap: mode === 'prod' ? false : true,
       rollupOptions: {
         input: {
           newtab: resolve(__dirname, 'src/newtab/newtab.html')
         },
         output: {
-          entryFileNames: 'assets/[name].js',
-          assetFileNames: 'assets/[name].[ext]',
+          entryFileNames: mode === 'dev' ? 'assets/[name].js' : 'assets/[name].[hash].js',
+          assetFileNames: mode === 'dev' ? 'assets/[name].[ext]' : 'assets/[name].[hash].[ext]',
         }
       },
-      minify: false,
+      minify: mode === 'prod' ? 'esbuild' : false,
     },
     publicDir: 'public',
     define: {
