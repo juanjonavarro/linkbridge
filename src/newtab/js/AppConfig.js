@@ -1,8 +1,6 @@
 export const APP_CONFIG = {
     DEBUG: __APP_DEBUG__,
-    APPLICATION_CATEGORY_ID: 1,
-    BOOKMARK_CATEGORY_ID: 2,
-    EXPORT_CONFIG_FORMAT: 1,   
+    EXPORT_CONFIG_FORMAT: 1,
     APP_CONFIG_FORMAT: 1, 
     THEMES: [
         { name: 'Tron (Default)', id: 'tron', style: 'dark' },

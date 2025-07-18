@@ -18,13 +18,13 @@ export function LinksService(configService, storageService) {
             { 
                 name: 'Applications', 
                 storageKey: 'applicationsGroups',
-                interface: linksCategoryInterface(APP_CONFIG.APPLICATION_CATEGORY_ID, appListElement)
+                interface: linksCategoryInterface('applications', appListElement)
             },
         'bookmarks':
             {
                 name: 'Bookmarks',
                 storageKey: 'bookmarksGroups',
-                interface: linksCategoryInterface(APP_CONFIG.BOOKMARK_CATEGORY_ID, bookmarkListElement)
+                interface: linksCategoryInterface('bookmarks', bookmarkListElement)
             }
     };
 
@@ -32,7 +32,8 @@ export function LinksService(configService, storageService) {
     configService.setExportAction(exportLinks);
 
     return {
-        loadLinks
+        loadLinks,
+        moveLink
     };
     
     function linksCategoryInterface(type, rootElement) {        
@@ -46,7 +47,7 @@ export function LinksService(configService, storageService) {
                 linksGroups = groups;
             },
             draw: function() {      
-                if (type === APP_CONFIG.BOOKMARK_CATEGORY_ID) {
+                if (type === 'bookmarks') {
                     const addGroupButton = document.querySelector('#bookmarks-title .add-link');
                     addGroupButton.addEventListener('click', (event) => {
                         event.preventDefault();
@@ -66,20 +67,24 @@ export function LinksService(configService, storageService) {
                     });
                 }
                 rootElement.innerHTML = `
-                    ${linksGroups.map(group => `
+                    ${linksGroups.map((group, groupIndex) => `
                         <div class="links-group">
                             <h1><span>${group.name}</span>
                                 <a href="#" title="Add new link" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a>
                             </h1>
                             <ul class="links-group-links">
-                                ${group.links.map(link => `<li class="link">
-                                    <a href="${link.url}">
+                                ${group.links.length===0 ? 
+                                    `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
+                                    : group.links.map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
+                                    <a href="#" class="drag-handle config-element"><i class="bi bi-grip-vertical"></i></a>
+                                    <a href="${link.url}" class="link-element">                                        
                                         ${link.icon_data ? `<img src="${link.icon_data}" class="link-icon">` : ''}
                                         <div class="link">
                                             <div class="link-name">${link.name}</div>
-                                            <div class="link-url">${formatUrl(link.url)}</div>
-                                        </div>
-                                    </a>
+                                            <div class="link-url">${formatUrl(link.url)}</div>                                            
+                                        </div>                                        
+                                    </a>   
+                                    <div class="link-edit config-element"><i class="bi-pencil-square"></i></div>                                 
                                     </li>`).join('')}
                             </ul>
                         </div>
@@ -102,7 +107,7 @@ export function LinksService(configService, storageService) {
                         });
                     });
 
-                    group.querySelectorAll('ul li.link a').forEach((link, linkIndex) => {
+                    group.querySelectorAll('ul li.link a.link-element').forEach((link, linkIndex) => {
                         link.addEventListener('click', (event) => {
                             if (!configService.isConfigMode()) {
                                 event.currentTarget.setAttribute('target', configService.get().open_in_new_tab ? '_blank' : '_self');
@@ -149,7 +154,29 @@ export function LinksService(configService, storageService) {
                 });
             }
         };
-    }   
+    }
+
+    function moveLink(sourceCategory, sourceGroupIndex, sourceLinkIndex,
+                       targetCategory, targetGroupIndex, targetLinkIndex) {
+        logger.log(`Move link from ${sourceCategory} ${sourceGroupIndex} ${sourceLinkIndex} to ${targetCategory} ${targetGroupIndex} ${targetLinkIndex}`);
+
+        const element = linksCategories[sourceCategory].interface.get()[sourceGroupIndex].links[sourceLinkIndex];
+        logger.log(element);
+
+        if (sourceCategory === targetCategory && sourceGroupIndex === targetGroupIndex) {
+            // If moving a link within the same group, in a previous position, increment the link index to delete
+            if (sourceLinkIndex > targetLinkIndex) {
+                sourceLinkIndex++;
+            } else if (sourceLinkIndex < targetLinkIndex) {
+                targetLinkIndex++;
+            }
+        }
+        linksCategories[targetCategory].interface.get()[targetGroupIndex].links.splice(targetLinkIndex, 0, element);
+        linksCategories[sourceCategory].interface.get()[sourceGroupIndex].links.splice(sourceLinkIndex, 1);
+
+        saveLinks();
+        drawLinks();
+    }
     
     function loadLinks() {
         storageService.get(['configuration' ], (data) => {

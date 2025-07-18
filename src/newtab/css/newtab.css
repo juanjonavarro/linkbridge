@@ -215,13 +215,14 @@ a {
     width: auto;
     max-width: 1500px;
     padding: 16px;
-    margin: 0 auto;
+    margin: 2em auto 0 auto;
 }
 
 
 
-#app-zone {
-
+#app-zone .over {
+    outline: 2px solid rgba(var(--primary-color), .5);
+    border-radius: 10px;
 }
 
 /* Configuration */
@@ -371,7 +372,7 @@ a {
     padding: 2px;
 }
 
-#applications-list .links-group a:hover, #applications-list .links-group a:focus {
+#applications-list .links-group li:hover, #applications-list .links-group li:focus {
     background: rgba(var(--primary-color), .05);
 }
 
@@ -389,6 +390,35 @@ a {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+#applications-list .links-group-links li.drop-zone {
+    height: 3em;
+}
+
+#applications-list .links-group li a.drag-handle {
+    flex: 0 0 auto;
+    font-size: 2em;
+}
+
+#applications-list .links-group li .link-edit {
+    opacity: 0;
+    flex: 0 0 auto;
+    background: rgb(var(--background-color));
+    height: 100%;
+    align-content: center;
+    padding-left: calc(var(--gap-size) / 4);
+}
+
+#applications-list .links-group li:hover .link-edit {
+    opacity: 1;
+}
+
+#applications-list .links-group li a.link-element {
+    flex: 1 1 auto;
+    align-items: center;
 }
 
 #applications-list .links-group-links li a {
@@ -495,15 +525,41 @@ a {
 
 #bookmarks-list .links-group li {
     margin-bottom: calc(var(--gap-size) / 4);
+    display: flex;
+    align-items: center;
+}
+
+#bookmarks-list .links-group li.drop-zone {
+    height: 3em;
 }
 
 #bookmarks-list .links-group li a {
     transition: all .25s ease;
 }
 
+#bookmarks-list .links-group li a.drag-handle {
+    flex: 0 0 auto;
+    font-size: 1.2em;
+}
+
+#bookmarks-list .links-group li .link-edit {
+    opacity: 0;
+}
+
+#bookmarks-list .links-group li:hover .link-edit {
+    opacity: 1;
+}
+
+#bookmarks-list .links-group li a.link-element {
+    flex: 1 1 auto;
+}
+
 #bookmarks-list .links-group li a:hover, #bookmarks-list .links-group li a:focus {
-    padding-left: 10px;
     text-decoration: underline;
+}
+
+#app:not(.config-mode)  #bookmarks-list .links-group li a:hover, #app:not(.config-mode)  #bookmarks-list .links-group li a:focus {
+    padding-left: 10px;
 }
 
 /* Modales */
