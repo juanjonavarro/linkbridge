@@ -403,7 +403,7 @@ export function LinksService(configService, storageService) {
                             return;
                         }
                         if (data.applications && data.bookmarks && data.images) {
-                            const result = confirm("Are you sure you want to import this data? This will overwrite your current data.");
+                            const result = confirm("Are you sure you want to import this data? This will overwrite your current groups and links.");
                             if (!result) {
                                 return;
                             }
