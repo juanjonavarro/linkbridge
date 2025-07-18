@@ -19,6 +19,12 @@ export function ConfigService(storageService) {
 
     let configMode = false;
 
+    // Config button
+    configButton.addEventListener('click', () => {
+        appRoot.classList.toggle('config-mode');
+        configMode = !configMode;
+    });
+
     // Open in new tab checkbox management
     openInNewTabCheckbox.addEventListener('change', () => {
         configuration.open_in_new_tab = openInNewTabCheckbox.checked;
@@ -66,12 +72,6 @@ export function ConfigService(storageService) {
 
     function init(config) {
         setConfiguration(config);
-
-        // Config button
-        configButton.addEventListener('click', () => {
-            appRoot.classList.toggle('config-mode');
-            configMode = !configMode;
-        });
 
         openInNewTabCheckbox.checked = configuration.open_in_new_tab || false;
         pageTitleInput.value = configuration.page_title || '';
