@@ -15,7 +15,7 @@ export function EditLinkService() {
     const removeIconButton = document.getElementById('remove-icon-button');
     const titleElement = document.querySelector('#edit-link-dialog h2');
 
-    const log = LogService().getLogger();
+    const logger = LogService().getLogger();
 
     let onClose = null;
     let link = { 

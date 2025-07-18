@@ -39,7 +39,7 @@ export function LinksService(configService, storageService) {
         let linksGroups = [];
                         
         return {
-            get: function(groups) {
+            get: function() {
                 return linksGroups
             },
             set: function(groups) {
@@ -170,8 +170,8 @@ export function LinksService(configService, storageService) {
                         let configuration = data.configuration || {
                             status: 'config-pending'
                         };
-                        let applications = null;
-                        let bookmarks = null;
+                        let applications;
+                        let bookmarks;
                         let images = [];
 
                         if (configuration.status === 'config-pending') {

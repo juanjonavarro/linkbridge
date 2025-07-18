@@ -10,11 +10,11 @@
     <div id="app">
         <div id="config-zone" class="config-element">
             <h1>Configuration</h1>
-            <div class="config-group" id="config-options-group">
+            <div class="config-group">
                 <input type="checkbox" id="open-in-new-tab" class="config-input"/>
                 <label for="open-in-new-tab" class="config-label">Open links in new tab</label>
             </div>
-            <div class="config-group" id="config-options-group">
+            <div class="config-group">
                 <label for="config-page-title" class="config-label">Page Title:</label>
                 <input type="text" id="config-page-title" class="config-input"/>                
             </div>
@@ -26,6 +26,9 @@
             <div class="config-group" id="import-export-group">
                 <button id="export-links" class="config-button primary">Export Links</button>
                 <button id="import-links" class="config-button primary">Import Links</button>
+            </div>
+            <div class="config-group" id="about-group">
+                <a href="#" id="about-link"><i class="bi bi-info-circle-fill"></i> About this extension</a>
             </div>
         </div>
 
@@ -71,6 +74,16 @@
                 <button class="primary" id="edit-group-save" type="button" value="save">Save</button>
                 <button id="edit-group-cancel" type="button">Cancel</button>
                 <button class="warning" id="edit-group-delete" type="button">Delete</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="info-dialog">
+        <form method="dialog" id="info-dialog-form">
+            <h2>Info</h2>
+            <div id="info-dialog-message"></div>
+            <div class="dialog-buttons-group">
+                <button class="primary" id="info-dialog-button" type="submit">Ok</button>
             </div>
         </form>
     </dialog>

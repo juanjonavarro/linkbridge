@@ -1,5 +1,6 @@
 import { APP_CONFIG } from '../AppConfig';
 import { LogService } from './LogService';
+import {InfoDialogService} from "./InfoDialogService";
 
 export function ConfigService(storageService) {
     const body = document.querySelector('body');   
@@ -10,12 +11,47 @@ export function ConfigService(storageService) {
     const exportLinksButton = document.getElementById('export-links');
     const importLinksButton = document.getElementById('import-links');
     const themeSelector = document.getElementById('theme-selector');
+    const aboutLink = document.getElementById('about-link');
 
     const logger = LogService().getLogger();
     
     let configuration = null;
 
     let configMode = false;
+
+    // Open in new tab checkbox management
+    openInNewTabCheckbox.addEventListener('change', () => {
+        configuration.open_in_new_tab = openInNewTabCheckbox.checked;
+        saveConfig();
+    });
+
+    // Page title management
+    pageTitleInput.addEventListener('input', () => {
+        configuration.page_title = pageTitleInput.value.trim() || APP_CONFIG.DEFAULT_PAGE_TITLE;
+        document.title = configuration.page_title;
+        saveConfig();
+    });
+
+    aboutLink.addEventListener('click', () => {
+        InfoDialogService().open("About this extension", `
+              <p>
+                This browser extension is created by <a href="https://www.juanjonavarro.com" target="_blank">Juanjo Navarro</a>.
+              </p>
+              <p>
+                I created it as a version of <a href="https://github.com/pawelmalak/flame" target="_blank">Flame</a> 
+                that works without requiring a server. Flame is itself inspired by 
+                <a href="https://github.com/jeroenpardon/sui" target="_blank">SUI</a>.
+              </p>
+              <p>
+                As a frequent user of Flame, I wanted to create a version that anyone, even without technical knowledge,
+                could enjoy directly, without needing to set up a server.
+              </p>
+              <p>
+                While no code from Flame or SUI is used, the visual design is strongly inspired by both projects.
+              </p>
+        `);
+    });
+
 
     return {
         get: getConfiguration,
@@ -28,6 +64,8 @@ export function ConfigService(storageService) {
         setImportAction
     }
 
+
+
     function init(config) {
         setConfiguration(config);
 
@@ -37,21 +75,8 @@ export function ConfigService(storageService) {
             configMode = !configMode;
         });
 
-        // Open in new tab checkbox management
         openInNewTabCheckbox.checked = configuration.open_in_new_tab || false;
-        openInNewTabCheckbox.addEventListener('change', () => {
-            configuration.open_in_new_tab = openInNewTabCheckbox.checked;
-            saveConfig();
-        });    
-        
-        // Page title
         pageTitleInput.value = configuration.page_title || '';
-        // On every keystroke
-        pageTitleInput.addEventListener('input', () => {
-            configuration.page_title = pageTitleInput.value.trim() || APP_CONFIG.DEFAULT_PAGE_TITLE;
-            document.title = configuration.page_title;
-            saveConfig();
-        });
 
         displayThemes();
     }
