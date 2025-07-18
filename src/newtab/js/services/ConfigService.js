@@ -34,21 +34,19 @@ export function ConfigService(storageService) {
 
     aboutLink.addEventListener('click', () => {
         InfoDialogService().open("About this extension", `
-              <p>
-                This browser extension is created by <a href="https://www.juanjonavarro.com" target="_blank">Juanjo Navarro</a>.
-              </p>
-              <p>
-                I created it as a version of <a href="https://github.com/pawelmalak/flame" target="_blank">Flame</a> 
-                that works without requiring a server. Flame is itself inspired by 
-                <a href="https://github.com/jeroenpardon/sui" target="_blank">SUI</a>.
-              </p>
-              <p>
-                As a frequent user of Flame, I wanted to create a version that anyone, even without technical knowledge,
-                could enjoy directly, without needing to set up a server.
-              </p>
-              <p>
-                While no code from Flame or SUI is used, the visual design is strongly inspired by both projects.
-              </p>
+            <p>
+              This browser extension was created by <a href="https://www.juanjonavarro.com" target="_blank">Juanjo Navarro</a>.
+            </p>
+            <p>
+              I created it inspired by <a href="https://github.com/pawelmalak/flame" target="_blank">Flame</a>, which in turn was inspired by 
+              <a href="https://github.com/jeroenpardon/sui" target="_blank">SUI</a>.
+            </p>
+            <p>
+              As a frequent user of Flame, I wanted to create a version that anyone, even without technical knowledge, could enjoy directly, without needing to set up a server.
+            </p>
+            <p>
+              While no code from Flame or SUI has been used, the visual design is strongly inspired by both projects.
+            </p>
         `);
     });
 
