@@ -218,13 +218,6 @@ a {
     margin: 2em auto 0 auto;
 }
 
-
-
-#app-zone .over {
-    outline: 2px solid rgba(var(--primary-color), .5);
-    border-radius: 10px;
-}
-
 /* Configuration */
 
 #config-zone {
@@ -344,6 +337,11 @@ a {
 
 /* Applications */
 
+#applications-list .over {
+    outline: 2px solid rgba(var(--primary-color), .5);
+    border-radius: 10px;
+}
+
 #applications-list a.add-link {
     margin-left: .2em;
     color: rgba(var(--primary-color), .9);
@@ -453,6 +451,11 @@ a {
 }
 
 /* Bookmarks */
+
+#bookmarks-list .over {
+    outline: 2px solid rgba(var(--primary-color), .5);
+    border-radius: 4px;
+}
 
 #bookmarks-title {
     font-size: 1.42rem;
