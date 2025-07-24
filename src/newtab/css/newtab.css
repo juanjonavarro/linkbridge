@@ -153,7 +153,7 @@ h1, h2, h3, h4, h5, h6 {
 :root .theme-white {
   --background-color: 255, 255, 255;
   --primary-color: 34, 34, 34;
-  --secondary-color: 221, 221, 221;
+  --secondary-color: 133, 133, 133;
 }
 
 :root .theme-blues {
