@@ -12,12 +12,15 @@ export function ConfigService(storageService) {
     const importLinksButton = document.getElementById('import-links');
     const themeSelector = document.getElementById('theme-selector');
     const aboutLink = document.getElementById('about-link');
+    const infoVersion = document.getElementById('info-version');
 
     const logger = LogService().getLogger();
     
     let configuration = null;
 
     let configMode = false;
+
+    infoVersion.innerText = `v${APP_CONFIG.APP_VERSION}`;
 
     // Config button
     configButton.addEventListener('click', () => {

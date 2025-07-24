@@ -249,7 +249,15 @@ a {
 
 #config-zone #config-page-title {
     max-width: 300px;
-} 
+}
+
+#config-zone #about-group {
+    justify-content: space-between;
+}
+
+#config-zone #info-version {
+    opacity: .6
+}
 
 #config-zone input {
     border: 1px solid rgba(var(--primary-color), .5);
