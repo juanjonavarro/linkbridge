@@ -88,6 +88,15 @@ export function EditLinkService() {
         displayIcon();
     });
 
+    findIconLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        let url = "https://dashboardicons.com";
+        if (editLinkNameInput.value.trim()) {
+            url += "/icons?q="+encodeURIComponent(editLinkNameInput.value.trim());
+        }
+        window.open(url, "_blank");
+    });
+
     function displayIcon() {
         if (link.icon_data) {
             currentIconContainer.style.display = 'block';
