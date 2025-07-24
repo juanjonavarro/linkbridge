@@ -3,6 +3,7 @@ import { LogService } from './LogService';
 
 export function EditLinkService() {
     const editLinkDialog = document.getElementById('edit-link-dialog');
+    const editLinkForm = document.getElementById('edit-link-form');
     const editLinkNameInput = document.getElementById('edit-link-name');
     const editLinkUrlInput = document.getElementById('edit-link-url');
     const editLinkSaveButton = document.getElementById('edit-link-save');
@@ -13,6 +14,7 @@ export function EditLinkService() {
     const currentIconPlaceholder = document.getElementById('current-icon-placeholder');
     const currentIconPreview = document.getElementById('current-icon-preview');
     const removeIconButton = document.getElementById('remove-icon-button');
+    const findIconLink = document.getElementById('find-icon-link');
     const titleElement = document.querySelector('#edit-link-dialog h2');
 
     const logger = LogService().getLogger();
@@ -50,7 +52,8 @@ export function EditLinkService() {
         }
     });
 
-    editLinkSaveButton.addEventListener('click', () => {
+    editLinkForm.addEventListener('submit', (event) => {
+        event.preventDefault();
         if (editLinkNameInput.value.trim() === "") {
             alert("Link name cannot be empty.");
             return;
