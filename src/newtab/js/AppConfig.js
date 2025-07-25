@@ -23,5 +23,6 @@ export const APP_CONFIG = {
     ],
     DEFAULT_THEME: 'tron',
     DEFAULT_THEME_STYLE: 'dark',
-    DEFAULT_PAGE_TITLE: 'LinkBridge'
+    DEFAULT_PAGE_TITLE: 'LinkBridge',
+    RESIZE_TO: 100
 };

@@ -1,5 +1,8 @@
 import { generateUUID } from '../utils'; 
-import { LogService } from './LogService';  
+import { LogService } from './LogService';
+
+import ImageBlobReduce from 'image-blob-reduce';
+import {APP_CONFIG} from "../AppConfig";
 
 export function EditLinkService() {
     const editLinkDialog = document.getElementById('edit-link-dialog');
@@ -18,6 +21,15 @@ export function EditLinkService() {
     const titleElement = document.querySelector('#edit-link-dialog h2');
 
     const logger = LogService().getLogger();
+
+    const imageBlobReduce = new ImageBlobReduce();
+    imageBlobReduce._create_blob = function (env) {
+        return this.pica.toBlob(env.out_canvas, 'image/webp', 0.8)
+            .then(function (blob) {
+                env.out_blob = blob;
+                return env;
+            });
+    };
 
     let onClose = null;
     let link = { 
@@ -72,13 +84,30 @@ export function EditLinkService() {
     editLinkIconFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                link.icon_data = e.target.result;
-                link.icon_id = "image:"+generateUUID();
-                displayIcon();
-            };
-            reader.readAsDataURL(file);
+            if (file.type ==="image/svg+xml" || window.linkBridgeBrowserInfo.getBrowserName(true) === "firefox") {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    link.icon_data = e.target.result;
+                    link.icon_id = "image:"+generateUUID();
+                    displayIcon();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                logger.log("Resizing image...");
+                imageBlobReduce.toBlob(file, {
+                    max: APP_CONFIG.RESIZE_TO
+                }).then((blob) => {
+                    // convert blob to base64
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        link.icon_data = e.target.result;
+                        link.icon_id = "image:" + generateUUID();
+                        displayIcon();
+                    };
+                    reader.readAsDataURL(blob);
+                });
+            }
+
         } else {
             logger.log("No file selected or file is empty.");                
         }
