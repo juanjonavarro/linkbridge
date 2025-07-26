@@ -20,6 +20,7 @@ export function app_interface() {
     const configService = ConfigService(storageService, () => {
         searchBar.value = '';
         linksService.filterLinks(searchBar.value);
+        searchBar.focus();
     });
 
     const linksService = LinksService(configService, storageService);
