@@ -2,7 +2,7 @@ import { APP_CONFIG } from '../AppConfig';
 import { LogService } from './LogService';
 import {InfoDialogService} from "./InfoDialogService";
 
-export function ConfigService(storageService) {
+export function ConfigService(storageService, configClickedCallback = () => {}) {
     const body = document.querySelector('body');   
     const appRoot = document.getElementById('app');
     const configButton = document.getElementById('config-button');
@@ -26,6 +26,7 @@ export function ConfigService(storageService) {
     configButton.addEventListener('click', () => {
         appRoot.classList.toggle('config-mode');
         configMode = !configMode;
+        configClickedCallback(configMode);
     });
 
     // Open in new tab checkbox management

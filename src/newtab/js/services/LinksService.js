@@ -5,6 +5,7 @@ import { formatUrl, generateUUID } from '../utils';
 import { LogService } from './LogService';
 
 export function LinksService(configService, storageService) {
+    const appZoneElement = document.getElementById('app-zone');
     const appListElement = document.getElementById('applications-list');
     const bookmarkListElement = document.getElementById('bookmarks-list'); 
 
@@ -12,6 +13,8 @@ export function LinksService(configService, storageService) {
 
     const editLinkService = EditLinkService();
     const editGroupService = EditGroupService();
+
+    let filterText = '';
 
     const linksCategories = {
         'applications': 
@@ -33,9 +36,23 @@ export function LinksService(configService, storageService) {
 
     return {
         loadLinks,
-        moveLink
+        moveLink,
+        filterLinks,
+        clickFirstLink
     };
-    
+
+    function filterLinks(input) {
+        filterText = input.toLowerCase();
+        drawLinks();
+    }
+
+    function clickFirstLink() {
+        const firstLink = appZoneElement.querySelector('.link-element');
+        if (firstLink) {
+            firstLink.click();
+        }
+    }
+
     function linksCategoryInterface(type, rootElement) {        
         let linksGroups = [];
                         
@@ -67,7 +84,7 @@ export function LinksService(configService, storageService) {
                     });
                 }
                 rootElement.innerHTML = `
-                    ${linksGroups.map((group, groupIndex) => `
+                    ${linksGroups.filter(group => !filterText || group.links.some(link => link.name.toLowerCase().includes(filterText))).map((group, groupIndex) => `
                         <div class="links-group">
                             <h1><span>${group.name}</span>
                                 <a href="#" title="Add new link" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a>
@@ -75,7 +92,7 @@ export function LinksService(configService, storageService) {
                             <ul class="links-group-links">
                                 ${group.links.length===0 ? 
                                     `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
-                                    : group.links.map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
+                                    : group.links.filter(link => !filterText ||link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
                                     <a href="#" class="drag-handle config-element"><i class="bi bi-grip-vertical"></i></a>
                                     <a href="${link.url}" class="link-element">                                        
                                         ${link.icon_data ? `<img src="${link.icon_data}" class="link-icon">` : ''}
