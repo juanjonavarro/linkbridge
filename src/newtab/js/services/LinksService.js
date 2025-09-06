@@ -175,6 +175,11 @@ export function LinksService(configService, storageService) {
 
     function moveLink(sourceCategory, sourceGroupIndex, sourceLinkIndex,
                        targetCategory, targetGroupIndex, targetLinkIndex) {
+        sourceGroupIndex = parseInt(sourceGroupIndex);
+        sourceLinkIndex = parseInt(sourceLinkIndex);
+        targetGroupIndex = parseInt(targetGroupIndex);
+        targetLinkIndex = parseInt(targetLinkIndex);
+
         logger.log(`Move link from ${sourceCategory} ${sourceGroupIndex} ${sourceLinkIndex} to ${targetCategory} ${targetGroupIndex} ${targetLinkIndex}`);
 
         const element = linksCategories[sourceCategory].interface.get()[sourceGroupIndex].links[sourceLinkIndex];
@@ -193,6 +198,13 @@ export function LinksService(configService, storageService) {
 
         saveLinks();
         drawLinks();
+    }
+
+    function imprimeGrupo(msg, grupo) {
+        logger.log(msg);
+        grupo.forEach((link, idx) => {
+            logger.log(idx, link);
+        });
     }
     
     function loadLinks() {
