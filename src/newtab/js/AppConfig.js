@@ -1,6 +1,6 @@
 export const APP_CONFIG = {
     DEBUG: __APP_DEBUG__,
-    APP_VERSION: '1.3',
+    APP_VERSION: __APP_VERSION__,
     EXPORT_CONFIG_FORMAT: 1,
     APP_CONFIG_FORMAT: 1, 
     THEMES: [

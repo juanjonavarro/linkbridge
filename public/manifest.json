@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "LinkBridge",
-  "version": "1.4",
+  "version": "changed at package.json",
   "description": "Smarter access to your web",
   "permissions": ["storage"],
   "chrome_url_overrides": {
