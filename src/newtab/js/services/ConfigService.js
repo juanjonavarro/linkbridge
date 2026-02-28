@@ -1,21 +1,22 @@
 import { APP_CONFIG } from '../AppConfig';
 import { LogService } from './LogService';
-import {InfoDialogService} from "./InfoDialogService";
+import { InfoDialogService } from "./InfoDialogService";
 
-export function ConfigService(storageService, configClickedCallback = () => {}) {
-    const body = document.querySelector('body');   
+export function ConfigService(storageService, configClickedCallback = () => { }) {
+    const body = document.querySelector('body');
     const appRoot = document.getElementById('app');
     const configButton = document.getElementById('config-button');
     const openInNewTabCheckbox = document.getElementById('open-in-new-tab');
     const pageTitleInput = document.getElementById('config-page-title');
     const exportLinksButton = document.getElementById('export-links');
     const importLinksButton = document.getElementById('import-links');
+    const exportHtmlButton = document.getElementById('export-html');
     const themeSelector = document.getElementById('theme-selector');
     const aboutLink = document.getElementById('about-link');
     const infoVersion = document.getElementById('info-version');
 
     const logger = LogService().getLogger();
-    
+
     let configuration = null;
 
     let configMode = false;
@@ -69,7 +70,8 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
         init,
         changeTheme,
         setExportAction,
-        setImportAction
+        setImportAction,
+        setExportHtmlAction
     }
 
 
@@ -91,12 +93,16 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
         importLinksButton.addEventListener('click', action);
     }
 
-    function isConfigMode()  {
+    function setExportHtmlAction(action) {
+        exportHtmlButton.addEventListener('click', action);
+    }
+
+    function isConfigMode() {
         return configMode;
     }
 
     function saveConfig() {
-        storageService.set({configuration}, () => {
+        storageService.set({ configuration }, () => {
             logger.log("Configuration saved successfully.");
         });
     }
@@ -107,7 +113,7 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
 
     function setConfiguration(config) {
         configuration = config;
-    }  
+    }
 
     // Theme selection
 
@@ -135,7 +141,7 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
                 configuration.them_style = selectedStyle;
 
                 changeTheme(configuration.theme, configuration.them_style);
-                
+
                 saveConfig();
                 displayThemes();
             });
@@ -144,7 +150,7 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
 
     function changeTheme(theme, style) {
         body.className = body.className.replace(/theme-[\w-]+/g, '');
-        body.className = body.className.replace(/theme-style-[\w-]+/g , '');
+        body.className = body.className.replace(/theme-style-[\w-]+/g, '');
 
         if (theme && APP_CONFIG.THEMES.some(t => t.id === theme)) {
             body.classList.add(`theme-${theme}`);
@@ -152,7 +158,7 @@ export function ConfigService(storageService, configClickedCallback = () => {}) 
             logger.log("Theme changed to:", theme, "style:", style);
         } else {
             logger.log("Invalid theme:", theme);
-        }        
+        }
     }
 
 }

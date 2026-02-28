@@ -7,7 +7,7 @@ import { LogService } from './LogService';
 export function LinksService(configService, storageService) {
     const appZoneElement = document.getElementById('app-zone');
     const appListElement = document.getElementById('applications-list');
-    const bookmarkListElement = document.getElementById('bookmarks-list'); 
+    const bookmarkListElement = document.getElementById('bookmarks-list');
 
     const logger = LogService().getLogger();
 
@@ -17,22 +17,23 @@ export function LinksService(configService, storageService) {
     let filterText = '';
 
     const linksCategories = {
-        'applications': 
-            { 
-                name: 'Applications', 
-                storageKey: 'applicationsGroups',
-                interface: linksCategoryInterface('applications', appListElement)
-            },
+        'applications':
+        {
+            name: 'Applications',
+            storageKey: 'applicationsGroups',
+            interface: linksCategoryInterface('applications', appListElement)
+        },
         'bookmarks':
-            {
-                name: 'Bookmarks',
-                storageKey: 'bookmarksGroups',
-                interface: linksCategoryInterface('bookmarks', bookmarkListElement)
-            }
+        {
+            name: 'Bookmarks',
+            storageKey: 'bookmarksGroups',
+            interface: linksCategoryInterface('bookmarks', bookmarkListElement)
+        }
     };
 
     configService.setImportAction(importLinks);
     configService.setExportAction(exportLinks);
+    configService.setExportHtmlAction(exportHtml);
 
     return {
         loadLinks,
@@ -53,17 +54,17 @@ export function LinksService(configService, storageService) {
         }
     }
 
-    function linksCategoryInterface(type, rootElement) {        
+    function linksCategoryInterface(type, rootElement) {
         let linksGroups = [];
-                        
+
         return {
-            get: function() {
+            get: function () {
                 return linksGroups
             },
-            set: function(groups) {
+            set: function (groups) {
                 linksGroups = groups;
             },
-            draw: function() {      
+            draw: function () {
                 if (type === 'bookmarks') {
                     const addGroupButton = document.querySelector('#bookmarks-title .add-link');
                     addGroupButton.addEventListener('click', (event) => {
@@ -90,9 +91,9 @@ export function LinksService(configService, storageService) {
                                 <a href="#" title="Add new link" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a>
                             </h1>
                             <ul class="links-group-links">
-                                ${group.links.length===0 ? 
-                                    `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
-                                    : group.links.filter(link => !filterText ||link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
+                                ${group.links.length === 0 ?
+                        `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
+                        : group.links.filter(link => !filterText || link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
                                     <a href="#" class="drag-handle config-element"><i class="bi bi-grip-vertical"></i></a>
                                     <a href="${link.url}" class="link-element">                                        
                                         ${link.icon_data ? `<img src="${link.icon_data}" class="link-icon">` : ''}
@@ -137,9 +138,9 @@ export function LinksService(configService, storageService) {
                                 if (action === "save") {
                                     linksGroups[groupIndex].links[linkIndex].id = data.id;
                                     linksGroups[groupIndex].links[linkIndex].name = data.name;
-                                    linksGroups[groupIndex].links[linkIndex].url = data.url;  
+                                    linksGroups[groupIndex].links[linkIndex].url = data.url;
                                     linksGroups[groupIndex].links[linkIndex].icon_id = data.icon_id;
-                                    linksGroups[groupIndex].links[linkIndex].icon_data = data.icon_data;                                  
+                                    linksGroups[groupIndex].links[linkIndex].icon_data = data.icon_data;
                                 } else if (action === "delete") {
                                     linksGroups[groupIndex].links.splice(linkIndex, 1);
                                 }
@@ -174,7 +175,7 @@ export function LinksService(configService, storageService) {
     }
 
     function moveLink(sourceCategory, sourceGroupIndex, sourceLinkIndex,
-                       targetCategory, targetGroupIndex, targetLinkIndex) {
+        targetCategory, targetGroupIndex, targetLinkIndex) {
         sourceGroupIndex = parseInt(sourceGroupIndex);
         sourceLinkIndex = parseInt(sourceLinkIndex);
         targetGroupIndex = parseInt(targetGroupIndex);
@@ -206,9 +207,9 @@ export function LinksService(configService, storageService) {
             logger.log(idx, link);
         });
     }
-    
+
     function loadLinks() {
-        storageService.get(['configuration' ], (data) => {
+        storageService.get(['configuration'], (data) => {
             if (data.configuration && data.configuration.theme) {
                 configService.changeTheme(data.configuration.theme, data.configuration.them_style);
             } else {
@@ -232,9 +233,10 @@ export function LinksService(configService, storageService) {
 
                         if (configuration.status === 'config-pending') {
                             logger.log("Configuration is pending, loading default links.");
-                            let default_config = await fetch("../../default_links.json");                
+                            const defaultConfigUrl = new URL('../default_links.json', import.meta.url);
+                            let default_config = await fetch(defaultConfigUrl);
                             let config_json = await default_config.json();
-                            
+
                             configuration.status = 'active';
                             configuration.theme = APP_CONFIG.DEFAULT_THEME;
                             configuration.theme_style = APP_CONFIG.DEFAULT_THEME_STYLE;
@@ -247,7 +249,7 @@ export function LinksService(configService, storageService) {
                         } else {
                             logger.log("Loading links from storage.");
                             applications = data.applicationsGroups || [];
-                            bookmarks = data.bookmarksGroups || [];                            
+                            bookmarks = data.bookmarksGroups || [];
                             Object.keys(data).forEach(key => {
                                 if (key.startsWith('image:')) {
                                     images.push({
@@ -258,17 +260,17 @@ export function LinksService(configService, storageService) {
                             });
                             if (configuration.config_version !== APP_CONFIG.APP_CONFIG_FORMAT) {
                                 // TODO Convert old config to new format
-                                
+
                             }
                             configuration.theme = configuration.theme || APP_CONFIG.DEFAULT_THEME;
                             configuration.theme_style = configuration.theme_style || APP_CONFIG.DEFAULT_THEME_STYLE;
                             configuration.page_title = configuration.page_title || APP_CONFIG.DEFAULT_PAGE_TITLE;
                             configuration.config_version = APP_CONFIG.APP_CONFIG_FORMAT;
-                        }            
+                        }
 
                         configService.init(configuration);
                         configService.saveConfig();
-                        
+
                         linksCategories.applications.interface.set(applications);
                         linksCategories.bookmarks.interface.set(bookmarks);
 
@@ -364,7 +366,7 @@ export function LinksService(configService, storageService) {
                         link.icon_data = null;
                     }
                 }
-            }            
+            }
         }
     }
 
@@ -375,7 +377,7 @@ export function LinksService(configService, storageService) {
     }
 
     function exportLinks() {
-            storageService.get(null, (items) => {
+        storageService.get(null, (items) => {
             const images = [];
             Object.keys(items).forEach(key => {
                 if (key.startsWith('image:')) {
@@ -383,7 +385,7 @@ export function LinksService(configService, storageService) {
                         id: key,
                         data: items[key]
                     });
-                } 
+                }
             });
 
             const exportData = {
@@ -391,7 +393,7 @@ export function LinksService(configService, storageService) {
                 applications: items.applicationsGroups || [],
                 bookmarks: items.bookmarksGroups || [],
                 images
-            };                
+            };
 
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -408,7 +410,7 @@ export function LinksService(configService, storageService) {
             const seconds = date.getSeconds().toString().padStart(2, '0');
             a.download = `links_export_${year}${month}${day}_${hours}${minutes}${seconds}.json`;
 
-            
+
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -444,7 +446,7 @@ export function LinksService(configService, storageService) {
                             for (const image of data.images) {
                                 importData[image.id] = image.data;
                             }
-                            
+
                             storageService.set(importData, () => {
                                 logger.log("Import data saved successfully.");
                                 loadLinks();
@@ -462,5 +464,159 @@ export function LinksService(configService, storageService) {
         };
         input.click();
     }
-    
+
+    async function exportHtml() {
+        const cssContent = await getEmbeddedCss();
+        const htmlContent = generateStaticHtml(cssContent);
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'linkbridge.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    async function getEmbeddedCss() {
+        let cssString = '';
+        for (const sheet of document.styleSheets) {
+            try {
+                if (sheet.href) {
+                    const response = await fetch(sheet.href);
+                    let cssText = await response.text();
+
+                    // Handle font face imports/urls
+                    const urlRegex = /url\(['"]?([^'")]+)['"]?\)/g;
+                    let match;
+                    while ((match = urlRegex.exec(cssText)) !== null) {
+                        const originalUrl = match[1];
+                        if (originalUrl.startsWith('data:')) continue;
+
+                        // Construct absolute URL
+                        const absoluteUrl = new URL(originalUrl, sheet.href).href;
+
+                        try {
+                            const fontResponse = await fetch(absoluteUrl);
+                            const fontBlob = await fontResponse.blob();
+                            const reader = new FileReader();
+                            const base64Font = await new Promise(resolve => {
+                                reader.onloadend = () => resolve(reader.result);
+                                reader.readAsDataURL(fontBlob);
+                            });
+
+                            cssText = cssText.replace(originalUrl, base64Font);
+                        } catch (e) {
+                            logger.log(`Failed to embed resource: ${absoluteUrl}`, e);
+                        }
+                    }
+                    cssString += cssText;
+
+                } else {
+                    cssString += sheet.cssRules ? Array.from(sheet.cssRules).map(rule => rule.cssText).join('') : '';
+                }
+            } catch (e) {
+                logger.log('Error accessing stylesheet', e);
+            }
+        }
+        return cssString;
+    }
+
+    function generateStaticHtml(cssContent) {
+        // Clone the app zone to manipulate it without affecting the live view
+        const appZoneClone = appZoneElement.cloneNode(true);
+
+        // Remove edit/config elements from the clone
+        appZoneClone.querySelectorAll('.config-element').forEach(el => el.remove());
+        appZoneClone.querySelectorAll('.link-edit').forEach(el => el.remove());
+        appZoneClone.querySelectorAll('.drag-handle').forEach(el => el.remove());
+
+        // Remove drop-zones
+        appZoneClone.querySelectorAll('.drop-zone').forEach(el => el.remove());
+
+        // In the live app, clicks are intercepted. In static, we want standard behavior.
+        // If config says open in new tab, we should add target="_blank" to all links.
+        const openInNewTab = configService.get().open_in_new_tab;
+
+        appZoneClone.querySelectorAll('a.link-element').forEach(a => {
+            if (openInNewTab) {
+                a.setAttribute('target', '_blank');
+            } else {
+                a.removeAttribute('target');
+            }
+        });
+
+
+        const searchScript = `
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const searchBar = document.getElementById('search-bar');
+                    const links = document.querySelectorAll('.link'); // wrapper li
+                    
+                    searchBar.addEventListener('input', (e) => {
+                        const filterText = e.target.value.toLowerCase();
+                        links.forEach(link => {
+                           const linkName = link.querySelector('.link-name').innerText.toLowerCase();
+                           if (linkName.includes(filterText)) {
+                               link.style.display = '';
+                               // Ensure parent group is visible if it has visible links
+                               link.closest('.links-group').style.display = '';
+                           } else {
+                               link.style.display = 'none';
+                           }
+                        });
+                        
+                        // Hide empty groups
+                        document.querySelectorAll('.links-group').forEach(group => {
+                            const visibleLinks = group.querySelectorAll('li.link:not([style*="display: none"])');
+                            if (visibleLinks.length === 0) {
+                                group.style.display = 'none';
+                            } else {
+                                group.style.display = '';
+                            }
+                        });
+                    });
+                    
+                     searchBar.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const visibleLink = document.querySelector('li.link:not([style*="display: none"]) a.link-element');
+                            if (visibleLink) {
+                                visibleLink.click();
+                            }
+                        }
+                    });
+                    
+                    searchBar.focus();
+                });
+            </script>
+        `;
+
+        return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${document.title}</title>
+  <style>
+    ${cssContent}
+    /* Hide configuration related elements that might have slipped through or are controlled by JS */
+    .config-element, .link-edit, .drag-handle { display: none !important; }
+    #config-button { display: none !important; }
+    /* Ensure styles that depend on 'body' classes (theme) work. We need to copy body classes. */
+  </style>
+</head>
+<body class="${document.body.className}">
+    <div id="app">
+        <div id="app-zone">
+            ${appZoneClone.innerHTML}
+        </div>
+    </div>
+    ${searchScript}
+</body>
+</html>`;
+    }
+
 }
