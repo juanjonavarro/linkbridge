@@ -363,44 +363,44 @@ a {
 
 /* Applications */
 
-#applications-list .over {
+.links-section-list .over {
     outline: 2px solid rgba(var(--primary-color), .5);
     border-radius: 10px;
 }
 
-#applications-list a.add-link {
+.links-section-list a.add-link {
     margin-left: .2em;
     color: rgba(var(--primary-color), .9);
     transition: all .3s ease;
 }
 
-#applications-list a.add-link:hover, #applications-list a.add-link:focus {
+.links-section-list a.add-link:hover, .links-section-list a.add-link:focus {
     color: rgba(var(--primary-color), 1);
 }   
 
-#applications-list .links-group {
+.links-section-list .links-group {
     margin-bottom: calc(var(--gap-size) * 1.5);
 }
 
-#applications-list .links-group h1 {
+.links-section-list .links-group h1 {
     font-size: 1.42rem;
     font-weight: 900;
     text-transform: uppercase;
     margin-bottom: var(--gap-size);
 }
 
-#applications-list .links-group a {
+.links-section-list .links-group a {
     color: rgb(var(--primary-color));
     transition: all .25s ease;
     border-radius: 4px;
     padding: 2px;
 }
 
-#applications-list .links-group li:hover, #applications-list .links-group li:focus {
+.links-section-list .links-group li:hover, .links-section-list .links-group li:focus {
     background: rgba(var(--primary-color), .05);
 }
 
-#applications-list .links-group-links {
+.links-section-list .links-group-links {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
@@ -409,7 +409,7 @@ a {
     gap: var(--gap-size);
 }
 
-#applications-list .links-group-links li {
+.links-section-list .links-group-links li {
     width: 337px;
     list-style: none;
     margin: 0;
@@ -418,16 +418,16 @@ a {
     align-items: center;
 }
 
-#applications-list .links-group-links li.drop-zone {
+.links-section-list .links-group-links li.drop-zone {
     height: 3em;
 }
 
-#applications-list .links-group li a.drag-handle {
+.links-section-list .links-group li a.drag-handle {
     flex: 0 0 auto;
     font-size: 2em;
 }
 
-#applications-list .links-group li .link-edit {
+.links-section-list .links-group li .link-edit {
     opacity: 0;
     flex: 0 0 auto;
     background: rgb(var(--background-color));
@@ -436,39 +436,39 @@ a {
     padding-left: calc(var(--gap-size) / 4);
 }
 
-#applications-list .links-group li:hover .link-edit {
+.links-section-list .links-group li:hover .link-edit {
     opacity: 1;
 }
 
-#applications-list .links-group li a.link-element {
+.links-section-list .links-group li a.link-element {
     flex: 1 1 auto;
     align-items: center;
 }
 
-#applications-list .links-group-links li a {
+.links-section-list .links-group-links li a {
     display: flex;
     gap: calc(var(--gap-size) / 2);
     overflow: hidden;
 }
 
-#applications-list .links-group-links li a img {
+.links-section-list .links-group-links li a img {
     width: 35px;
     height: 35px;
     object-fit: scale-down;
     flex: 0 0 auto;
 }
 
-#applications-list .links-group-links li a .link {
+.links-section-list .links-group-links li a .link {
     flex: 1 1 auto;
 }
 
-#applications-list .links-group-links li a .link .link-name {
+.links-section-list .links-group-links li a .link .link-name {
     text-transform: uppercase;
     font-weight: 500;
     text-wrap: nowrap;
 }
 
-#applications-list .links-group-links li a .link .link-url {
+.links-section-list .links-group-links li a .link .link-url {
     text-transform: uppercase;
     color: rgb(var(--secondary-color));
     font-weight: 400;
@@ -478,38 +478,11 @@ a {
 
 /* Bookmarks */
 
-#bookmarks-list .over {
-    outline: 2px solid rgba(var(--primary-color), .5);
-    border-radius: 4px;
-}
-
 #bookmarks-title {
     font-size: 1.42rem;
     font-weight: 900;
     text-transform: uppercase;
     margin-bottom: var(--gap-size);
-}
-
-#bookmarks-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--gap-size);
-}
-
-#bookmarks-list a.add-link, #bookmarks-title a.add-link {
-    margin-left: .2em;
-    color: rgba(var(--primary-color), .9);
-    transition: all .3s ease;
-}   
-
-#bookmarks-list a.add-link:hover, #bookmarks-list a.add-link:focus,
-#bookmarks-title a.add-link:hover, #bookmarks-title a.add-link:focus {
-    color: rgba(var(--primary-color), 1);
-}
-
-#bookmarks-list .links-group {
-    width: 337px;
-    margin-bottom: calc(var(--gap-size) * 1.5);
 }
 
 #bookmarks-list .links-group h1 {
@@ -520,75 +493,110 @@ a {
     margin-bottom: calc(var(--gap-size) / 2);
 }
 
-#bookmarks-list .links-group ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+@media (min-width: 722px) {
 
-#bookmarks-list .links-group-links a {
-    color: rgb(var(--primary-color));
-    display: flex;
-    gap: 4px;
-}
+    #bookmarks-list .over {
+        outline: 2px solid rgba(var(--primary-color), .5);
+        border-radius: 4px;
+    }
 
-#bookmarks-list .links-group-links a img {
-    width: 20px;
-    height: 20px;
-    object-fit: scale-down;
-    flex: 0 0 auto;
-}
+    #bookmarks-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--gap-size);
+    }
 
-#bookmarks-list .links-group-links a .link {
-    flex: 1 1 auto;
-}
+    #bookmarks-list a.add-link, #bookmarks-title a.add-link {
+        margin-left: .2em;
+        color: rgba(var(--primary-color), .9);
+        transition: all .3s ease;
+    }
 
-#bookmarks-list .links-group-links a .link .link-name {
-    overflow: hidden;
-    height: 1.5em;
-}
+    #bookmarks-list a.add-link:hover, #bookmarks-list a.add-link:focus,
+    #bookmarks-title a.add-link:hover, #bookmarks-title a.add-link:focus {
+        color: rgba(var(--primary-color), 1);
+    }
 
-#bookmarks-list .links-group-links a .link .link-url {
-    display: none;
-}
+    #bookmarks-list .links-group {
+        width: 337px;
+        margin-bottom: calc(var(--gap-size) * 1.5);
+    }
 
-#bookmarks-list .links-group li {
-    margin-bottom: calc(var(--gap-size) / 4);
-    display: flex;
-    align-items: center;
-}
+    #bookmarks-list .links-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        gap: 0;
+    }
 
-#bookmarks-list .links-group li.drop-zone {
-    height: 3em;
-}
+    #bookmarks-list .links-group-links a {
+        color: rgb(var(--primary-color));
+        display: flex;
+        gap: 4px;
+    }
 
-#bookmarks-list .links-group li a {
-    transition: all .25s ease;
-}
+    #bookmarks-list .links-group-links a img {
+        width: 20px;
+        height: 20px;
+        object-fit: scale-down;
+        flex: 0 0 auto;
+    }
 
-#bookmarks-list .links-group li a.drag-handle {
-    flex: 0 0 auto;
-    font-size: 1.2em;
-}
+    #bookmarks-list .links-group-links a .link {
+        flex: 1 1 auto;
+    }
 
-#bookmarks-list .links-group li .link-edit {
-    opacity: 0;
-}
+    #bookmarks-list .links-group-links a .link .link-name {
+        overflow: hidden;
+        height: 1.5em;
+        text-transform: none;
+        font-weight: 400;
+        text-wrap: nowrap;
+    }
 
-#bookmarks-list .links-group li:hover .link-edit {
-    opacity: 1;
-}
+    #bookmarks-list .links-group-links a .link .link-url {
+        display: none;
+    }
 
-#bookmarks-list .links-group li a.link-element {
-    flex: 1 1 auto;
-}
+    #bookmarks-list .links-group li {
+        margin-bottom: calc(var(--gap-size) / 4);
+        display: flex;
+        align-items: center;
+    }
 
-#bookmarks-list .links-group li a:hover, #bookmarks-list .links-group li a:focus {
-    text-decoration: underline;
-}
+    #bookmarks-list .links-group li.drop-zone {
+        height: 3em;
+    }
 
-#app:not(.config-mode)  #bookmarks-list .links-group li a:hover, #app:not(.config-mode)  #bookmarks-list .links-group li a:focus {
-    padding-left: 10px;
+    #bookmarks-list .links-group li a {
+        transition: all .25s ease;
+    }
+
+    #bookmarks-list .links-group li a.drag-handle {
+        flex: 0 0 auto;
+        font-size: 1.2em;
+    }
+
+    #bookmarks-list .links-group li .link-edit {
+        opacity: 0;
+    }
+
+    #bookmarks-list .links-group li:hover .link-edit {
+        opacity: 1;
+    }
+
+    #bookmarks-list .links-group li a.link-element {
+        flex: 1 1 auto;
+    }
+
+    #bookmarks-list .links-group li a:hover, #bookmarks-list .links-group li a:focus {
+        text-decoration: underline;
+    }
+
+    #app:not(.config-mode) #bookmarks-list .links-group li a:hover, #app:not(.config-mode) #bookmarks-list .links-group li a:focus {
+        padding-left: 10px;
+    }
+
 }
 
 /* Modales */
