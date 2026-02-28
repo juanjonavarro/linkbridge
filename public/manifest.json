@@ -5,7 +5,7 @@
   "description": "Smarter access to your web",
   "permissions": ["storage"],
   "chrome_url_overrides": {
-    "newtab": "src/newtab/newtab.html"
+    "newtab": "index.html"
   },
   "browser_specific_settings": {
     "gecko": {

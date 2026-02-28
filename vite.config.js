@@ -12,10 +12,10 @@ function generateManifest() {
     name: 'generate-manifest',
     generateBundle() {
       const manifestPath = resolve(__dirname, 'public', 'manifest.json');
-      let manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
-      
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+
       manifest.version = appVersion;
-      
+
       this.emitFile({
         type: 'asset',
         fileName: 'manifest.json',
@@ -25,18 +25,17 @@ function generateManifest() {
   };
 }
 
-
-export default defineConfig(({ mode }) => {  
+export default defineConfig(({ mode }) => {
   const isDebug = mode === 'dev';
 
   return {
+    root: 'src',
+    base: './',
     build: {
-      outDir: 'dist',
+      outDir: '../dist',
+      emptyOutDir: true,
       sourcemap: mode === 'prod' ? false : true,
       rollupOptions: {
-        input: {
-          newtab: resolve(__dirname, 'src/newtab/newtab.html')
-        },
         output: {
           entryFileNames: mode === 'dev' ? 'assets/[name].js' : 'assets/[name].[hash].js',
           assetFileNames: mode === 'dev' ? 'assets/[name].[ext]' : 'assets/[name].[hash].[ext]',
@@ -44,7 +43,7 @@ export default defineConfig(({ mode }) => {
       },
       minify: mode === 'prod' ? 'esbuild' : false,
     },
-    publicDir: 'public',
+    publicDir: '../public',
     plugins: [
       generateManifest()
     ],
