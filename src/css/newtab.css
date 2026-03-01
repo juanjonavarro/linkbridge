@@ -281,7 +281,8 @@ a {
 #config-button {
     position: fixed;
     bottom: var(--gap-size);
-    left: var(--gap-size);
+    left: auto;
+    right: var(--gap-size);
     cursor: pointer;
     background-color: rgba(var(--secondary-color), .4);
     border-radius: 50%;
@@ -494,6 +495,11 @@ a {
 }
 
 @media (min-width: 722px) {
+
+    #config-button {
+        right: auto;
+        left: var(--gap-size);
+    }
 
     #bookmarks-list .over {
         outline: 2px solid rgba(var(--primary-color), .5);
