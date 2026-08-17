@@ -436,24 +436,31 @@ export function LinksService(configService, storageService) {
                             alert("Unsupported import file format.");
                             return;
                         }
-                        if (data.applications && data.bookmarks && data.images) {
+                        if (Array.isArray(data.applications) && Array.isArray(data.bookmarks) && Array.isArray(data.images)) {
                             const result = confirm("Are you sure you want to import this data? This will overwrite your current groups and links.");
                             if (!result) {
                                 return;
                             }
 
+                            const skippedLinks = [];
+                            let skippedImages = 0;
+
                             let importData = {};
-                            importData.applicationsGroups = data.applications;
-                            importData.bookmarksGroups = data.bookmarks;
+                            importData.applicationsGroups = sanitizeGroups(data.applications, skippedLinks);
+                            importData.bookmarksGroups = sanitizeGroups(data.bookmarks, skippedLinks);
 
                             for (const image of data.images) {
-                                importData[image.id] = image.data;
+                                if (typeof image.id === 'string' && image.id.startsWith('image:') && safeIconData(image.data)) {
+                                    importData[image.id] = image.data;
+                                } else {
+                                    skippedImages++;
+                                }
                             }
 
                             storageService.set(importData, () => {
                                 logger.log("Import data saved successfully.");
                                 loadLinks();
-                                alert("Links imported successfully.");
+                                alert("Links imported successfully." + importReport(skippedLinks, skippedImages));
                             });
                         } else {
                             alert("Invalid import file format.");
@@ -466,6 +473,45 @@ export function LinksService(configService, storageService) {
             }
         };
         input.click();
+    }
+
+    function sanitizeGroups(groups, skippedLinks) {
+        return groups.map(group => ({
+            id: typeof group.id === 'string' ? group.id : generateUUID(),
+            name: String(group.name ?? ''),
+            locked: !!group.locked,
+            links: (Array.isArray(group.links) ? group.links : []).flatMap(link => {
+                const url = safeUrl(link.url);
+                if (url === '#') {
+                    skippedLinks.push(`${String(group.name ?? '')} / ${String(link.name ?? '')}`);
+                    return [];
+                }
+                return [{
+                    id: typeof link.id === 'string' ? link.id : generateUUID(),
+                    name: String(link.name ?? ''),
+                    url: url,
+                    icon_id: typeof link.icon_id === 'string' ? link.icon_id : null
+                }];
+            })
+        }));
+    }
+
+    function importReport(skippedLinks, skippedImages) {
+        if (skippedLinks.length === 0 && skippedImages === 0) {
+            return '';
+        }
+        let report = '';
+        if (skippedLinks.length > 0) {
+            report += `\n\n${skippedLinks.length} link(s) skipped, URL is not http:// or https://\n`;
+            report += skippedLinks.slice(0, 10).map(l => `  - ${l}`).join('\n');
+            if (skippedLinks.length > 10) {
+                report += `\n  ... and ${skippedLinks.length - 10} more`;
+            }
+        }
+        if (skippedImages > 0) {
+            report += `\n\n${skippedImages} icon(s) skipped, not a valid image.`;
+        }
+        return report;
     }
 
     async function exportHtml() {
