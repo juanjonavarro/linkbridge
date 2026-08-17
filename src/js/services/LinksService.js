@@ -1,7 +1,7 @@
 import { EditLinkService } from './EditLinkService';
 import { EditGroupService } from './EditGroupService';
 import { APP_CONFIG } from '../AppConfig';
-import { formatUrl, generateUUID } from '../utils';
+import { esc, formatUrl, generateUUID, safeIconData, safeUrl } from '../utils';
 import { LogService } from './LogService';
 
 export function LinksService(configService, storageService) {
@@ -68,7 +68,7 @@ export function LinksService(configService, storageService) {
                 rootElement.innerHTML = `
                     ${linksGroups.filter(group => !filterText || group.links.some(link => link.name.toLowerCase().includes(filterText))).map((group, groupIndex) => `
                         <div class="links-group">
-                            <h1><span>${group.name}</span>
+                            <h1><span>${esc(group.name)}</span>
                                 <a href="#" title="Add new link" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a>
                             </h1>
                             <ul class="links-group-links">
@@ -76,11 +76,11 @@ export function LinksService(configService, storageService) {
                         `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
                         : group.links.filter(link => !filterText || link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
                                     <a href="#" class="drag-handle config-element"><i class="bi bi-grip-vertical"></i></a>
-                                    <a href="${link.url}" class="link-element">                                        
-                                        ${link.icon_data ? `<img src="${link.icon_data}" class="link-icon">` : ''}
+                                    <a href="${esc(safeUrl(link.url))}" class="link-element">
+                                        ${safeIconData(link.icon_data) ? `<img src="${esc(safeIconData(link.icon_data))}" class="link-icon">` : ''}
                                         <div class="link">
-                                            <div class="link-name">${link.name}</div>
-                                            <div class="link-url">${formatUrl(link.url)}</div>                                            
+                                            <div class="link-name">${esc(link.name)}</div>
+                                            <div class="link-url">${esc(formatUrl(link.url))}</div>
                                         </div>                                        
                                     </a>   
                                     <div class="link-edit config-element"><i class="bi-pencil-square"></i></div>                                 
@@ -602,7 +602,7 @@ export function LinksService(configService, storageService) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${document.title}</title>
+  <title>${esc(document.title)}</title>
   <style>
     ${cssContent}
     /* Hide configuration related elements that might have slipped through or are controlled by JS */
@@ -611,7 +611,7 @@ export function LinksService(configService, storageService) {
     /* Ensure styles that depend on 'body' classes (theme) work. We need to copy body classes. */
   </style>
 </head>
-<body class="${document.body.className}">
+<body class="${esc(document.body.className)}">
     <div id="app">
         <div id="app-zone">
             ${appZoneClone.innerHTML}

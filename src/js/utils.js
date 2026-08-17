@@ -6,5 +6,24 @@ export function generateUUID() {
 }
 
 export function formatUrl(url) {
-    return url.replace(/^(https?:\/\/)/, '');
+    return String(url ?? '').replace(/^(https?:\/\/)/, '');
+}
+
+export function esc(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+export function safeUrl(url) {
+    const value = String(url ?? '').trim();
+    return /^https?:\/\//i.test(value) ? value : '#';
+}
+
+export function safeIconData(data) {
+    const value = String(data ?? '');
+    return /^data:image\//i.test(value) ? value : '';
 }
