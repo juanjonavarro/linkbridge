@@ -233,8 +233,9 @@ export function LinksService(configService, storageService) {
                         let applications;
                         let bookmarks;
                         let images = [];
+                        const isFirstRun = configuration.status === 'config-pending';
 
-                        if (configuration.status === 'config-pending') {
+                        if (isFirstRun) {
                             logger.log("Configuration is pending, loading default links.");
                             const defaultConfigUrl = new URL('../default_links.json', import.meta.url);
                             let default_config = await fetch(defaultConfigUrl);
@@ -272,7 +273,6 @@ export function LinksService(configService, storageService) {
                         }
 
                         configService.init(configuration);
-                        configService.saveConfig();
 
                         linksCategories.applications.interface.set(applications);
                         linksCategories.bookmarks.interface.set(bookmarks);
@@ -280,7 +280,12 @@ export function LinksService(configService, storageService) {
                         loadImages(images);
                         drawLinks();
 
-                        saveLinks();
+                        // Only the first run needs to persist: it is the only path where the data
+                        // (default links and images) does not come from storage.
+                        if (isFirstRun) {
+                            configService.saveConfig();
+                            saveLinks();
+                        }
                     });
                 });
             });
