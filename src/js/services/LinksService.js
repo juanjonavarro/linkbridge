@@ -57,7 +57,7 @@ export function LinksService(configService, storageService) {
     function linksCategoryInterface(type, rootElement) {
         let linksGroups = [];
 
-        return {
+        const categoryInterface = {
             get: function () {
                 return linksGroups
             },
@@ -65,25 +65,6 @@ export function LinksService(configService, storageService) {
                 linksGroups = groups;
             },
             draw: function () {
-                if (type === 'bookmarks') {
-                    const addGroupButton = document.querySelector('#bookmarks-title .add-link');
-                    addGroupButton.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        logger.log("Add Group clicked for Bookmarks");
-                        editGroupService.editGroup(null, (action, data) => {
-                            if (action === "save") {
-                                linksGroups.push({
-                                    id: data.id,
-                                    name: data.name,
-                                    locked: false,
-                                    links: []
-                                });
-                            }
-                            saveLinks();
-                            this.draw();
-                        });
-                    });
-                }
                 rootElement.innerHTML = `
                     ${linksGroups.filter(group => !filterText || group.links.some(link => link.name.toLowerCase().includes(filterText))).map((group, groupIndex) => `
                         <div class="links-group">
@@ -121,7 +102,7 @@ export function LinksService(configService, storageService) {
                                 linksGroups.splice(groupIndex, 1);
                             }
                             saveLinks();
-                            this.draw();
+                            categoryInterface.draw();
                         });
                     });
 
@@ -145,7 +126,7 @@ export function LinksService(configService, storageService) {
                                     linksGroups[groupIndex].links.splice(linkIndex, 1);
                                 }
                                 saveLinks();
-                                this.draw();
+                                categoryInterface.draw();
                             });
                         });
                     });
@@ -165,13 +146,35 @@ export function LinksService(configService, storageService) {
                                     });
                                 }
                                 saveLinks();
-                                this.draw();
+                                categoryInterface.draw();
                             });
                         });
                     });
                 });
             }
         };
+
+        if (type === 'bookmarks') {
+            const addGroupButton = document.querySelector('#bookmarks-title .add-link');
+            addGroupButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                logger.log("Add Group clicked for Bookmarks");
+                editGroupService.editGroup(null, (action, data) => {
+                    if (action === "save") {
+                        linksGroups.push({
+                            id: data.id,
+                            name: data.name,
+                            locked: false,
+                            links: []
+                        });
+                    }
+                    saveLinks();
+                    categoryInterface.draw();
+                });
+            });
+        }
+
+        return categoryInterface;
     }
 
     function moveLink(sourceCategory, sourceGroupIndex, sourceLinkIndex,
