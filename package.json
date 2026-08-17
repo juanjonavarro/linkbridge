@@ -1,10 +1,12 @@
 {
   "name": "linkbridge",
-  "version": "1.4",
+  "version": "1.5-PREVIEW",
   "main": "newtab.js",
   "scripts": {
     "build": "vite build --mode prod",
-    "dev": "vite build --mode dev"
+    "dev": "vite build --mode dev",
+    "watch": "vite build --mode dev --watch",
+    "serve": "vite preview --port 4321"
   },
   "keywords": [],
   "author": "",
