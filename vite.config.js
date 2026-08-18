@@ -5,6 +5,7 @@ import fs from 'fs';
 // Lee package.json para obtener la versión
 const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
 const appVersion = packageJson.version;
+const appVersionName = packageJson.version_name;
 
 // Plugin para generar el manifest.json con la versión correcta
 function generateManifest() {
@@ -15,6 +16,7 @@ function generateManifest() {
       const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
       manifest.version = appVersion;
+      manifest.version_name = appVersionName;
 
       this.emitFile({
         type: 'asset',
@@ -50,6 +52,7 @@ export default defineConfig(({ mode }) => {
     define: {
       __APP_DEBUG__: JSON.stringify(isDebug),
       __APP_VERSION__: JSON.stringify(appVersion),
+      __APP_VERSION_NAME__: JSON.stringify(appVersionName),
     },
   };
 });

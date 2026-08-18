@@ -21,7 +21,7 @@ export function ConfigService(storageService, configClickedCallback = () => { })
 
     let configMode = false;
 
-    infoVersion.innerText = `v${APP_CONFIG.APP_VERSION}`;
+    infoVersion.innerText = `v${APP_CONFIG.APP_VERSION_NAME}`;
 
     // Config button
     configButton.addEventListener('click', () => {
