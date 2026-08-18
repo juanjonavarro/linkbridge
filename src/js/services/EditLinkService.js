@@ -1,7 +1,6 @@
 import { generateUUID } from '../utils'; 
 import { LogService } from './LogService';
 
-import ImageBlobReduce from 'image-blob-reduce';
 import {APP_CONFIG} from "../AppConfig";
 
 export function EditLinkService() {
@@ -22,9 +21,7 @@ export function EditLinkService() {
 
     const logger = LogService().getLogger();
 
-    const imageBlobReduce = new ImageBlobReduce({
-        pica: ImageBlobReduce.pica({ features: ["js"] })
-    });
+    let imageBlobReducePromise = null;
 
     let onClose = null;
     let link = { 
@@ -108,6 +105,23 @@ export function EditLinkService() {
         window.open(url, "_blank");
     });
 
+    function getImageBlobReduce() {
+        if (!imageBlobReducePromise) {
+            imageBlobReducePromise = import("image-blob-reduce")
+                .then(({ default: ImageBlobReduce }) => {
+                    if (__APP_DEBUG__) {
+                        logger.log("Image optimizer loaded.");
+                    }
+
+                    return new ImageBlobReduce({
+                        pica: ImageBlobReduce.pica({ features: ["js"] })
+                    });
+                });
+        }
+
+        return imageBlobReducePromise;
+    }
+
     async function optimizeIcon(file) {
         if (file.type === "image/svg+xml") {
             if (__APP_DEBUG__) {
@@ -179,6 +193,7 @@ export function EditLinkService() {
     }
 
     async function resizeImage(file) {
+        const imageBlobReduce = await getImageBlobReduce();
         const canvas = await imageBlobReduce.toCanvas(file, {
             max: APP_CONFIG.RESIZE_TO
         });
