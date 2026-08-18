@@ -298,7 +298,9 @@ export function LinksService(configService, storageService) {
         for (const category of Object.values(linksCategories)) {
             categories[category.storageKey] = []
             category.interface.get().forEach((group) => {
+                group.id ||= generateUUID();
                 let links = group.links.map(link => {
+                    link.id ||= generateUUID();
                     if (link.icon_id && link.icon_id.startsWith('image:')) {
                         images.push({
                             id: link.icon_id,
@@ -306,7 +308,7 @@ export function LinksService(configService, storageService) {
                         });
                     }
                     return {
-                        id: link.id || generateUUID(),
+                        id: link.id,
                         name: link.name,
                         url: link.url,
                         icon_id: link.icon_id,
@@ -314,7 +316,7 @@ export function LinksService(configService, storageService) {
                 });
                 categories[category.storageKey].push({
                     name: group.name,
-                    id: group.id || generateUUID(),
+                    id: group.id,
                     locked: group.locked || false,
                     links: links
                 });
