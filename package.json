@@ -1,6 +1,6 @@
 {
   "name": "linkbridge",
-  "version": "1.5-PREVIEW",
+  "version": "1.5.1",
   "main": "newtab.js",
   "scripts": {
     "build": "vite build --mode prod",
