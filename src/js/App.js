@@ -1,5 +1,4 @@
 import '../css/newtab.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import { ConfigService } from './services/ConfigService';
 import { StorageService } from './services/StorageService';

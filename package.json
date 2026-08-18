@@ -14,10 +14,10 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "bootstrap-icons": "1.13.1",
     "vite": "^7.0.4"
   },
   "dependencies": {
-    "bootstrap-icons": "^1.13.1",
     "image-blob-reduce": "^4.1.0"
   }
 }

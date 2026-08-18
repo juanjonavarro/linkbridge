@@ -81,6 +81,16 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Global styles */
 
+.icon-sprite {
+    display: none;
+}
+
+.icon {
+    display: inline-block;
+    vertical-align: -.125em;
+    flex: 0 0 auto;
+}
+
 :root {
     --font-size: 14px;
     --gap-size: 16px;

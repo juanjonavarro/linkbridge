@@ -69,13 +69,13 @@ export function LinksService(configService, storageService) {
                     ${linksGroups.filter(group => !filterText || group.links.some(link => link.name.toLowerCase().includes(filterText))).map((group, groupIndex) => `
                         <div class="links-group">
                             <h1><span>${esc(group.name)}</span>
-                                <a href="#" title="Add new link" class="config-element add-link"><i class="bi-plus-circle-dotted"></i></a>
+                                <a href="#" title="Add new link" class="config-element add-link"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-plus-circle-dotted"></use></svg></a>
                             </h1>
                             <ul class="links-group-links">
                                 ${group.links.length === 0 ?
                         `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
                         : group.links.filter(link => !filterText || link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
-                                    <a href="#" class="drag-handle config-element"><i class="bi bi-grip-vertical"></i></a>
+                                    <a href="#" class="drag-handle config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-grip-vertical"></use></svg></a>
                                     <a href="${esc(safeUrl(link.url))}" class="link-element">
                                         ${safeIconData(link.icon_data) ? `<img src="${esc(safeIconData(link.icon_data))}" class="link-icon">` : ''}
                                         <div class="link">
@@ -83,7 +83,7 @@ export function LinksService(configService, storageService) {
                                             <div class="link-url">${esc(formatUrl(link.url))}</div>
                                         </div>                                        
                                     </a>   
-                                    <div class="link-edit config-element"><i class="bi-pencil-square"></i></div>                                 
+                                    <div class="link-edit config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-pencil-square"></use></svg></div>
                                     </li>`).join('')}
                             </ul>
                         </div>
