@@ -40,6 +40,7 @@ export function ConfigService(storageService, configClickedCallback = () => { })
     pageTitleInput.addEventListener('input', () => {
         configuration.page_title = pageTitleInput.value.trim() || APP_CONFIG.DEFAULT_PAGE_TITLE;
         document.title = configuration.page_title;
+        storageService.setBootCache('title-cached', configuration.page_title);
         saveConfig();
     });
 
@@ -121,7 +122,7 @@ export function ConfigService(storageService, configClickedCallback = () => { })
         themeSelector.innerHTML = APP_CONFIG.THEMES.map(theme => `
             <a href="" 
             class="theme-option ${configuration.theme === theme.id ? 'selected' : ''}"
-            data-theme="${theme.id}" data-style="${theme.style}">
+            data-theme="${theme.id}">
             <div class="title">${theme.name}</div>
             <div class="example">
                 <div class="background theme-${theme.id} theme-style-${theme.style}"></div>
@@ -135,12 +136,10 @@ export function ConfigService(storageService, configClickedCallback = () => { })
             option.addEventListener('click', (event) => {
                 event.preventDefault();
                 const selectedTheme = event.currentTarget.dataset.theme;
-                const selectedStyle = event.currentTarget.dataset.style;
-                logger.log("Selected theme:", selectedTheme, "style:", selectedStyle);
+                logger.log("Selected theme:", selectedTheme);
                 configuration.theme = selectedTheme;
-                configuration.them_style = selectedStyle;
 
-                changeTheme(configuration.theme, configuration.them_style);
+                changeTheme(configuration.theme);
 
                 saveConfig();
                 displayThemes();
@@ -148,16 +147,25 @@ export function ConfigService(storageService, configClickedCallback = () => { })
         });
     }
 
-    function changeTheme(theme, style) {
+    // The light/dark style is a property of the theme, declared once in APP_CONFIG.THEMES.
+    // It is derived here instead of being stored, so it can never drift out of sync.
+    function changeTheme(theme) {
         body.className = body.className.replace(/theme-[\w-]+/g, '');
         body.className = body.className.replace(/theme-style-[\w-]+/g, '');
 
-        if (theme && APP_CONFIG.THEMES.some(t => t.id === theme)) {
+        const themeConfig = theme && APP_CONFIG.THEMES.find(t => t.id === theme);
+
+        if (themeConfig) {
+            const style = themeConfig.style;
             body.classList.add(`theme-${theme}`);
             body.classList.add(`theme-style-${style}`);
             logger.log("Theme changed to:", theme, "style:", style);
+            storageService.setBootCache('theme-cached', `${theme} ${style}`);
         } else {
             logger.log("Invalid theme:", theme);
+            // Drop the cache too, or boot.js would keep painting a theme that no
+            // longer exists on every load.
+            storageService.setBootCache('theme-cached', null);
         }
     }
 

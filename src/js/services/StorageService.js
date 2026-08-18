@@ -4,7 +4,24 @@ export function StorageService() {
     let idb = null;
     const getIdb = () => (idb ??= createIdbStorage("linkbridge", "kv"));
 
-    return { set, get, remove };
+    return { set, get, remove, setBootCache };
+
+    // Synchronous mirror of a couple of values for public/boot.js, which runs before
+    // this bundle exists and cannot wait for an async read. Write-only from here and
+    // disposable by design: localStorage is site data and the user can wipe it without
+    // touching the real storage above. Never read it back as a source of truth.
+    // Pass a null value to drop a key. Keys are also spelled out in public/boot.js.
+    function setBootCache(key, value) {
+        try {
+            if (value == null) {
+                localStorage.removeItem(`linkbridge:${key}`);
+            } else {
+                localStorage.setItem(`linkbridge:${key}`, value);
+            }
+        } catch (e) {
+            // Private mode, blocked site data or quota: the cache is optional.
+        }
+    }
 
     function set(keys, callback) {
         const p = native ? native.set(keys) : getIdb().set(keys);

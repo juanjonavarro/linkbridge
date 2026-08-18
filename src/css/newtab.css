@@ -82,15 +82,16 @@ h1, h2, h3, h4, h5, h6 {
 /* Global styles */
 
 :root {
-    --background-color: 0, 0, 0;
-    --primary-color: 0, 0, 0;
-    --secondary-color: 100, 100, 100;
     --font-size: 14px;
     --gap-size: 16px;
     font-size: var(--font-size);
 }
 
-:root .theme-tron {
+/* The bare :root palette is the one painted before any theme class reaches <body>:
+   on the very first run, or when the boot cache is missing. It carries the values of
+   APP_CONFIG.DEFAULT_THEME ('tron') so that paint is a real theme instead of the
+   black-on-black it used to be. Keep both in sync if the default theme changes. */
+:root, :root .theme-tron {
   --background-color: 36, 43, 51;
   --primary-color: 239, 251, 255;
   --secondary-color: 110, 226, 255;

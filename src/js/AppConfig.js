@@ -22,7 +22,6 @@ export const APP_CONFIG = {
         { name: 'Mint', id: 'mint', style: 'dark' }
     ],
     DEFAULT_THEME: 'tron',
-    DEFAULT_THEME_STYLE: 'dark',
     DEFAULT_PAGE_TITLE: 'LinkBridge',
     RESIZE_TO: 100
 };

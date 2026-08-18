@@ -7,6 +7,9 @@
   <link rel="icon" href="./images/icon.ico" type="image/png">
 </head>
 <body>
+    <!-- Applies the cached theme and title before the first paint. Must be inside
+         <body> (it needs document.body) and must run before the bundle. -->
+    <script src="./boot.js"></script>
     <div id="app">
         <div id="config-zone" class="config-element">
             <h1>Configuration</h1>

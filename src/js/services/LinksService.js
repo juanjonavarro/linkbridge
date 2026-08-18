@@ -214,81 +214,80 @@ export function LinksService(configService, storageService) {
     function loadLinks() {
         storageService.get(['configuration'], (data) => {
             if (data.configuration && data.configuration.theme) {
-                configService.changeTheme(data.configuration.theme, data.configuration.them_style);
+                configService.changeTheme(data.configuration.theme);
             } else {
-                configService.changeTheme(APP_CONFIG.DEFAULT_THEME, APP_CONFIG.DEFAULT_THEME_STYLE);
+                configService.changeTheme(APP_CONFIG.DEFAULT_THEME);
             }
             if (data.configuration && data.configuration.page_title) {
                 document.title = data.configuration.page_title;
             } else {
                 document.title = APP_CONFIG.DEFAULT_PAGE_TITLE;
             }
-            // continue loading after changing the theme
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    storageService.get(null, async (data) => {
-                        let configuration = data.configuration || {
-                            status: 'config-pending'
-                        };
-                        let applications;
-                        let bookmarks;
-                        let images = [];
-                        const isFirstRun = configuration.status === 'config-pending';
+            storageService.setBootCache('title-cached', document.title);
+            // Yield so the browser can paint the themed background before the heavy
+            // read and render below. A timer fires even when no frames are composited;
+            // requestAnimationFrame does not, and the whole load used to hang on it.
+            setTimeout(() => {
+                storageService.get(null, async (data) => {
+                    let configuration = data.configuration || {
+                        status: 'config-pending'
+                    };
+                    let applications;
+                    let bookmarks;
+                    let images = [];
+                    const isFirstRun = configuration.status === 'config-pending';
 
-                        if (isFirstRun) {
-                            logger.log("Configuration is pending, loading default links.");
-                            const defaultConfigUrl = new URL('../default_links.json', import.meta.url);
-                            let default_config = await fetch(defaultConfigUrl);
-                            let config_json = await default_config.json();
+                    if (isFirstRun) {
+                        logger.log("Configuration is pending, loading default links.");
+                        const defaultConfigUrl = new URL('../default_links.json', import.meta.url);
+                        let default_config = await fetch(defaultConfigUrl);
+                        let config_json = await default_config.json();
 
-                            configuration.status = 'active';
-                            configuration.theme = APP_CONFIG.DEFAULT_THEME;
-                            configuration.theme_style = APP_CONFIG.DEFAULT_THEME_STYLE;
-                            configuration.page_title = APP_CONFIG.DEFAULT_PAGE_TITLE;
-                            configuration.config_version = APP_CONFIG.APP_CONFIG_FORMAT;
+                        configuration.status = 'active';
+                        configuration.theme = APP_CONFIG.DEFAULT_THEME;
+                        configuration.page_title = APP_CONFIG.DEFAULT_PAGE_TITLE;
+                        configuration.config_version = APP_CONFIG.APP_CONFIG_FORMAT;
 
-                            applications = config_json.applications;
-                            bookmarks = config_json.bookmarks;
-                            images = config_json.images || [];
-                        } else {
-                            logger.log("Loading links from storage.");
-                            applications = data.applicationsGroups || [];
-                            bookmarks = data.bookmarksGroups || [];
-                            Object.keys(data).forEach(key => {
-                                if (key.startsWith('image:')) {
-                                    images.push({
-                                        id: key,
-                                        data: data[key]
-                                    });
-                                }
-                            });
-                            if (configuration.config_version !== APP_CONFIG.APP_CONFIG_FORMAT) {
-                                // TODO Convert old config to new format
-
+                        applications = config_json.applications;
+                        bookmarks = config_json.bookmarks;
+                        images = config_json.images || [];
+                    } else {
+                        logger.log("Loading links from storage.");
+                        applications = data.applicationsGroups || [];
+                        bookmarks = data.bookmarksGroups || [];
+                        Object.keys(data).forEach(key => {
+                            if (key.startsWith('image:')) {
+                                images.push({
+                                    id: key,
+                                    data: data[key]
+                                });
                             }
-                            configuration.theme = configuration.theme || APP_CONFIG.DEFAULT_THEME;
-                            configuration.theme_style = configuration.theme_style || APP_CONFIG.DEFAULT_THEME_STYLE;
-                            configuration.page_title = configuration.page_title || APP_CONFIG.DEFAULT_PAGE_TITLE;
-                            configuration.config_version = APP_CONFIG.APP_CONFIG_FORMAT;
+                        });
+                        if (configuration.config_version !== APP_CONFIG.APP_CONFIG_FORMAT) {
+                            // TODO Convert old config to new format
+
                         }
+                        configuration.theme = configuration.theme || APP_CONFIG.DEFAULT_THEME;
+                        configuration.page_title = configuration.page_title || APP_CONFIG.DEFAULT_PAGE_TITLE;
+                        configuration.config_version = APP_CONFIG.APP_CONFIG_FORMAT;
+                    }
 
-                        configService.init(configuration);
+                    configService.init(configuration);
 
-                        linksCategories.applications.interface.set(applications);
-                        linksCategories.bookmarks.interface.set(bookmarks);
+                    linksCategories.applications.interface.set(applications);
+                    linksCategories.bookmarks.interface.set(bookmarks);
 
-                        loadImages(images);
-                        drawLinks();
+                    loadImages(images);
+                    drawLinks();
 
-                        // Only the first run needs to persist: it is the only path where the data
-                        // (default links and images) does not come from storage.
-                        if (isFirstRun) {
-                            configService.saveConfig();
-                            saveLinks();
-                        }
-                    });
+                    // Only the first run needs to persist: it is the only path where the data
+                    // (default links and images) does not come from storage.
+                    if (isFirstRun) {
+                        configService.saveConfig();
+                        saveLinks();
+                    }
                 });
-            });
+            }, 0);
         });
     }
 
