@@ -24,5 +24,6 @@ export const APP_CONFIG = {
     ],
     DEFAULT_THEME: 'tron',
     DEFAULT_PAGE_TITLE: 'LinkBridge',
-    RESIZE_TO: 100
+    RESIZE_TO: 100,
+    FORCE_RESIZE_OVER: 500
 };

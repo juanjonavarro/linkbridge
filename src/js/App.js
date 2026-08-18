@@ -5,15 +5,9 @@ import { ConfigService } from './services/ConfigService';
 import { StorageService } from './services/StorageService';
 import { LinksService } from './services/LinksService';
 import {MoveLinksService} from "./services/MoveLinksService";
-import {LogService} from "./services/LogService";
-import Bowser from 'bowser';
 
 export function app_interface() {
-    const logger = LogService().getLogger();
     const searchBar = document.getElementById('search-bar');
-
-    window.linkBridgeBrowserInfo = Bowser.getParser(navigator.userAgent);
-    logger.log(window.linkBridgeBrowserInfo);
 
     const storageService = StorageService();
 

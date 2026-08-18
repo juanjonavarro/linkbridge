@@ -22,14 +22,9 @@ export function EditLinkService() {
 
     const logger = LogService().getLogger();
 
-    const imageBlobReduce = new ImageBlobReduce();
-    imageBlobReduce._create_blob = function (env) {
-        return this.pica.toBlob(env.out_canvas, 'image/webp', 0.8)
-            .then(function (blob) {
-                env.out_blob = blob;
-                return env;
-            });
-    };
+    const imageBlobReduce = new ImageBlobReduce({
+        pica: ImageBlobReduce.pica({ features: ["js"] })
+    });
 
     let onClose = null;
     let link = { 
@@ -81,37 +76,21 @@ export function EditLinkService() {
         editLinkDialog.close("save");
     });
 
-    editLinkIconFileInput.addEventListener('change', (event) => {
+    editLinkIconFileInput.addEventListener('change', async (event) => {
         const file = event.target.files[0];
         if (file) {
-            if (file.type ==="image/svg+xml" || window.linkBridgeBrowserInfo.getBrowserName(true) === "firefox") {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    link.icon_data = e.target.result;
-                    link.icon_id = "image:"+generateUUID();
-                    displayIcon();
-                };
-                reader.readAsDataURL(file);
-            } else {
-                logger.log("Resizing image...");
-                imageBlobReduce.toBlob(file, {
-                    max: APP_CONFIG.RESIZE_TO
-                }).then((blob) => {
-                    // convert blob to base64
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        link.icon_data = e.target.result;
-                        link.icon_id = "image:" + generateUUID();
-                        displayIcon();
-                    };
-                    reader.readAsDataURL(blob);
-                });
+            try {
+                const icon = await optimizeIcon(file);
+                link.icon_data = await readAsDataUrl(icon);
+                link.icon_id = "image:" + generateUUID();
+                displayIcon();
+            } catch (error) {
+                logger.log("Failed to load image.", error);
             }
-
         } else {
             logger.log("No file selected or file is empty.");                
         }
-    });       
+    });
 
     removeIconButton.addEventListener('click', (event) => {
         event.preventDefault();
@@ -128,6 +107,102 @@ export function EditLinkService() {
         }
         window.open(url, "_blank");
     });
+
+    async function optimizeIcon(file) {
+        if (file.type === "image/svg+xml") {
+            if (__APP_DEBUG__) {
+                logger.log("Icon optimization skipped.", {
+                    source: getFileDetails(file),
+                    selected: "original",
+                    reason: "SVG files are preserved."
+                });
+            }
+            return file;
+        }
+
+        try {
+            const forcedByFormat = file.type === "image/gif";
+            const forcedByDimensions = !forcedByFormat && await exceedsSizeLimit(file);
+            const converted = await resizeImage(file);
+            const useConverted = forcedByFormat || forcedByDimensions || converted.size < file.size;
+
+            if (__APP_DEBUG__) {
+                let reason = "Original file is not larger.";
+                if (converted.size < file.size) {
+                    reason = "Converted file is smaller.";
+                }
+                if (forcedByDimensions) {
+                    reason = `Source exceeds ${APP_CONFIG.FORCE_RESIZE_OVER} pixels.`;
+                }
+                if (forcedByFormat) {
+                    reason = "GIF files are stored as static images.";
+                }
+
+                logger.log("Icon optimization completed.", {
+                    source: getFileDetails(file),
+                    converted: {
+                        type: converted.type,
+                        size: converted.size
+                    },
+                    selected: useConverted ? "converted" : "original",
+                    reason
+                });
+            }
+
+            return useConverted ? converted : file;
+        } catch (error) {
+            if (__APP_DEBUG__) {
+                logger.log("Image optimization failed; using the original file.", {
+                    source: getFileDetails(file),
+                    error
+                });
+            }
+            return file;
+        }
+    }
+
+    function getFileDetails(file) {
+        return {
+            name: file.name,
+            type: file.type,
+            size: file.size
+        };
+    }
+
+    async function exceedsSizeLimit(file) {
+        const image = await createImageBitmap(file);
+        try {
+            return Math.max(image.width, image.height) > APP_CONFIG.FORCE_RESIZE_OVER;
+        } finally {
+            image.close();
+        }
+    }
+
+    async function resizeImage(file) {
+        const canvas = await imageBlobReduce.toCanvas(file, {
+            max: APP_CONFIG.RESIZE_TO
+        });
+
+        try {
+            const blob = await imageBlobReduce.pica.toBlob(canvas, "image/webp", 0.8);
+            if (!blob || blob.size === 0 || !blob.type.startsWith("image/")) {
+                throw new Error("Image conversion produced an invalid blob.");
+            }
+            return blob;
+        } finally {
+            canvas.width = 0;
+            canvas.height = 0;
+        }
+    }
+
+    function readAsDataUrl(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(blob);
+        });
+    }
 
     function displayIcon() {
         if (link.icon_data) {
