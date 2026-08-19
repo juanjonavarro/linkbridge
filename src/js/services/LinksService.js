@@ -78,7 +78,7 @@ export function LinksService(configService, storageService) {
                                     <a href="#" class="drag-handle config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-grip-vertical"></use></svg></a>
                                     <a href="${esc(safeUrl(link.url))}" class="link-element">
                                         ${safeIconData(link.icon_data) ? `<img src="${esc(safeIconData(link.icon_data))}" class="link-icon">` : ''}
-                                        <div class="link">
+                                        <div class="link-body">
                                             <div class="link-name">${esc(link.name)}</div>
                                             <div class="link-url">${esc(formatUrl(link.url))}</div>
                                         </div>                                        
@@ -614,7 +614,7 @@ export function LinksService(configService, storageService) {
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     const searchBar = document.getElementById('search-bar');
-                    const links = document.querySelectorAll('.link'); // wrapper li
+                    const links = document.querySelectorAll('li.link');
                     
                     searchBar.addEventListener('input', (e) => {
                         const filterText = e.target.value.toLowerCase();
