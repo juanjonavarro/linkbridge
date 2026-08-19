@@ -545,11 +545,13 @@ export function LinksService(configService, storageService) {
 
                     // Handle font face imports/urls
                     const urlRegex = /url\(['"]?([^'")]+)['"]?\)/g;
-                    let match;
-                    while ((match = urlRegex.exec(cssText)) !== null) {
-                        const originalUrl = match[1];
-                        if (originalUrl.startsWith('data:')) continue;
-
+                    const resourceUrls = new Set(
+                        [...cssText.matchAll(urlRegex)]
+                            .map(match => match[1])
+                            .filter(url => !url.startsWith('data:'))
+                    );
+                    const embeddedResources = new Map();
+                    for (const originalUrl of resourceUrls) {
                         // Construct absolute URL
                         const absoluteUrl = new URL(originalUrl, sheet.href).href;
 
@@ -562,11 +564,15 @@ export function LinksService(configService, storageService) {
                                 reader.readAsDataURL(fontBlob);
                             });
 
-                            cssText = cssText.replace(originalUrl, base64Font);
+                            embeddedResources.set(originalUrl, base64Font);
                         } catch (e) {
                             logger.log(`Failed to embed resource: ${absoluteUrl}`, e);
                         }
                     }
+                    cssText = cssText.replace(urlRegex, (match, originalUrl) => {
+                        const embeddedResource = embeddedResources.get(originalUrl);
+                        return embeddedResource ? match.replace(originalUrl, embeddedResource) : match;
+                    });
                     cssString += cssText;
 
                 } else {
