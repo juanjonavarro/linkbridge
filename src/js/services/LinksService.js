@@ -47,6 +47,15 @@ export function LinksService(configService, storageService) {
         drawLinks();
     }
 
+    function linkMatchesFilter(link) {
+        if (!filterText) return true;
+
+        const name = String(link.name ?? '').toLowerCase();
+        const url = String(link.url ?? '').toLowerCase();
+
+        return name.includes(filterText) || url.includes(filterText);
+    }
+
     function clickFirstLink() {
         const firstLink = appZoneElement.querySelector('.link-element');
         if (firstLink) {
@@ -66,7 +75,7 @@ export function LinksService(configService, storageService) {
             },
             draw: function () {
                 rootElement.innerHTML = `
-                    ${linksGroups.filter(group => !filterText || group.links.some(link => link.name.toLowerCase().includes(filterText))).map((group, groupIndex) => `
+                    ${linksGroups.filter(group => !filterText || group.links.some(link => linkMatchesFilter(link))).map((group, groupIndex) => `
                         <div class="links-group">
                             <h1><span>${esc(group.name)}</span>
                                 <a href="#" title="Add new link" class="config-element add-link"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-plus-circle-dotted"></use></svg></a>
@@ -74,7 +83,7 @@ export function LinksService(configService, storageService) {
                             <ul class="links-group-links">
                                 ${group.links.length === 0 ?
                         `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
-                        : group.links.filter(link => !filterText || link.name.toLowerCase().includes(filterText)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
+                        : group.links.filter(link => linkMatchesFilter(link)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
                                     <a href="#" class="drag-handle config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-grip-vertical"></use></svg></a>
                                     <a href="${esc(safeUrl(link.url))}" class="link-element">
                                         ${safeIconData(link.icon_data) ? `<img src="${esc(safeIconData(link.icon_data))}" class="link-icon">` : ''}
@@ -620,7 +629,8 @@ export function LinksService(configService, storageService) {
                         const filterText = e.target.value.toLowerCase();
                         links.forEach(link => {
                            const linkName = link.querySelector('.link-name').innerText.toLowerCase();
-                           if (linkName.includes(filterText)) {
+                           const linkUrl = link.querySelector('a.link-element')?.getAttribute('href')?.toLowerCase() || '';
+                           if (linkName.includes(filterText) || linkUrl.includes(filterText)) {
                                link.style.display = '';
                                // Ensure parent group is visible if it has visible links
                                link.closest('.links-group').style.display = '';
