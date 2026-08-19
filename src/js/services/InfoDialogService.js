@@ -15,7 +15,7 @@ export function InfoDialogService() {
 
         dialog.addEventListener('close', () => {
             callback();
-        });
+        }, { once: true });
         dialog.showModal();
     }
 }
