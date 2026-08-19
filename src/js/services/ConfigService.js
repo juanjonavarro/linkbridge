@@ -59,6 +59,11 @@ export function ConfigService(storageService, configClickedCallback = () => { })
             <p>
               While no code from Flame or SUI has been used, the visual design is strongly inspired by both projects.
             </p>
+            <p>
+              LinkBridge collects nothing: no accounts, no analytics and no network requests. Your links and settings
+              never leave this device. Read the
+              <a href="https://github.com/juanjonavarro/linkbridge/blob/main/PRIVACY.md" target="_blank">privacy policy</a>.
+            </p>
         `);
     });
 
