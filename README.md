@@ -23,7 +23,7 @@ While no code from Flame or SUI has been used, the visual design is heavily insp
 # Install from Stores
 
 - Chrome Web Store: [Add to Chrome](https://chromewebstore.google.com/detail/linkbridge/demgmcklmnnacjoonalgdhmpjmhekhjp)
-- Firefox Add-ons: [Add to Firefox](https://addons.mozilla.org/es-ES/firefox/addon/linkbridge/)
+- Firefox Add-ons: [Add to Firefox](https://addons.mozilla.org/firefox/addon/linkbridge/)
 - Microsoft Edge Add-ons: [Add to Edge](https://microsoftedge.microsoft.com/addons/detail/linkbridge/bfliepniaigmjnibbmhcpnjboeaebgch)
 
 # Sideload / Local Development
