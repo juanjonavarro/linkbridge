@@ -4,6 +4,7 @@ import { ConfigService } from './services/ConfigService';
 import { StorageService } from './services/StorageService';
 import { LinksService } from './services/LinksService';
 import {MoveLinksService} from "./services/MoveLinksService";
+import { ImportExportService } from './services/ImportExportService';
 
 export function app_interface() {
     const searchBar = document.getElementById('search-bar');
@@ -18,6 +19,11 @@ export function app_interface() {
 
     const linksService = LinksService(configService, storageService);
     const moveLinksService = MoveLinksService(configService, linksService);
+    const importExportService = ImportExportService(configService, storageService);
+
+    configService.setImportAction(() => importExportService.importLinks(() => linksService.loadLinks()));
+    configService.setExportAction(() => importExportService.exportLinks());
+    configService.setExportHtmlAction(() => importExportService.exportHtml());
 
 
     searchBar.addEventListener('input', (e) => {
