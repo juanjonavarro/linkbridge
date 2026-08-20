@@ -5,7 +5,6 @@ export function EditGroupService() {
     const editGroupDialog = document.getElementById('edit-group-dialog');
     const editGroupForm = document.getElementById('edit-group-form');
     const editGroupNameInput = document.getElementById('edit-group-name');
-    const editGroupSaveButton = document.getElementById('edit-group-save');
     const editGroupCancelButton = document.getElementById('edit-group-cancel');
     const editGroupDeleteButton = document.getElementById('edit-group-delete');
     const titleElement = document.querySelector('#edit-group-dialog h2');

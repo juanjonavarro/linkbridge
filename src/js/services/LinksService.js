@@ -19,13 +19,11 @@ export function LinksService(configService, storageService) {
     const linksCategories = {
         'applications':
         {
-            name: 'Applications',
             storageKey: 'applicationsGroups',
             interface: linksCategoryInterface('applications', appListElement)
         },
         'bookmarks':
         {
-            name: 'Bookmarks',
             storageKey: 'bookmarksGroups',
             interface: linksCategoryInterface('bookmarks', bookmarkListElement)
         }
@@ -207,13 +205,6 @@ export function LinksService(configService, storageService) {
 
         saveLinks();
         drawLinks();
-    }
-
-    function imprimeGrupo(msg, grupo) {
-        logger.log(msg);
-        grupo.forEach((link, idx) => {
-            logger.log(idx, link);
-        });
     }
 
     function loadLinks() {
