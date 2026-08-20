@@ -20,6 +20,14 @@ While no code from Flame or SUI has been used, the visual design is heavily insp
 - Import/export your configuration
 - Option to open links in new tabs
 
+# Use it Online
+
+LinkBridge is also available as a web app at
+[linkbridge.juanjonavarro.com](https://linkbridge.juanjonavarro.com/), so you can use it as your
+home page without installing the extension. Configuration is stored in the browser, so the online
+version and the extension keep separate sets of links (you can move them across with
+Export/Import).
+
 # Install from Stores
 
 - Chrome Web Store: [Add to Chrome](https://chromewebstore.google.com/detail/linkbridge/demgmcklmnnacjoonalgdhmpjmhekhjp)

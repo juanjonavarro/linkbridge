@@ -64,6 +64,15 @@ export function ConfigService(storageService, configClickedCallback = () => { })
               never leave this device. Read the
               <a href="https://github.com/juanjonavarro/linkbridge/blob/main/PRIVACY.md" target="_blank">privacy policy</a>.
             </p>
+            <p>
+              It is also available as a web app at
+              <a href="https://linkbridge.juanjonavarro.com/" target="_blank">linkbridge.juanjonavarro.com</a>,
+              handy to use it as the home page of a browser where the extension is not installed.
+            </p>
+            <p>
+              The source code lives at
+              <a href="https://github.com/juanjonavarro/linkbridge" target="_blank">github.com/juanjonavarro/linkbridge</a>.
+            </p>
         `);
     });
 
