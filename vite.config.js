@@ -16,7 +16,6 @@ function generateManifest() {
       const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
 
       manifest.version = appVersion;
-      manifest.version_name = appVersionName;
 
       this.emitFile({
         type: 'asset',
