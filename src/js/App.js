@@ -18,7 +18,8 @@ export function app_interface() {
     });
 
     const linksService = LinksService(configService, storageService);
-    const moveLinksService = MoveLinksService(configService, linksService);
+    // Called for its side effects: registers the drag & drop listeners on #app-zone.
+    MoveLinksService(configService, linksService);
     const importExportService = ImportExportService(configService, storageService);
 
     configService.setImportAction(() => importExportService.importLinks(() => linksService.loadLinks()));

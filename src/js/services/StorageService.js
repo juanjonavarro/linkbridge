@@ -143,7 +143,7 @@ function createIdbStorage(dbName, storeName) {
 
         return tx("readonly", async (store) => {
             if (nk.type === "all") {
-                // getAllKeys + get por clave (compatible y simple)
+                // getAllKeys + get per key (compatible and simple)
                 const allKeys = await reqToPromise(store.getAllKeys());
                 const out = {};
                 for (const k of allKeys) out[k] = await reqToPromise(store.get(k));

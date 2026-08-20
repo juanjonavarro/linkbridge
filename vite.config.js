@@ -2,12 +2,12 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import fs from 'fs';
 
-// Lee package.json para obtener la versión
+// Read package.json to get the version
 const packageJson = JSON.parse(fs.readFileSync(resolve(__dirname, 'package.json'), 'utf-8'));
 const appVersion = packageJson.version;
 const appVersionName = packageJson.version_name;
 
-// Plugin para generar el manifest.json con la versión correcta
+// Plugin to generate manifest.json with the correct version
 function generateManifest() {
   return {
     name: 'generate-manifest',
