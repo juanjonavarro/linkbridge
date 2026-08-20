@@ -1,18 +1,23 @@
 {
   "name": "linkbridge",
-  "version": "1.5",
-  "version_name": "1.5 PREVIEW",
-  "main": "newtab.js",
+  "version": "1.5.0",
+  "version_name": "1.5.0 PREVIEW",
+  "private": true,
+  "type": "module",
+  "description": "Smarter access to your web",
+  "author": "Juanjo Navarro",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanjonavarro/linkbridge.git"
+  },
+  "keywords": [],
   "scripts": {
     "build": "vite build --mode prod",
     "dev": "vite build --mode dev",
     "watch": "vite build --mode dev --watch",
     "serve": "vite preview --port 4321"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "description": "",
   "devDependencies": {
     "bootstrap-icons": "1.13.1",
     "vite": "^7.0.4"
