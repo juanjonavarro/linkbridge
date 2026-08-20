@@ -66,9 +66,10 @@ function generatePwa() {
     },
 
     closeBundle() {
-      // The extension manifest has no business being served over HTTP; it only lands here
-      // because public/ is copied wholesale.
+      // The extension manifest and its background script have no business being served
+      // over HTTP; they only land here because public/ is copied wholesale.
       fs.rmSync(join(outDir, 'manifest.json'), { force: true });
+      fs.rmSync(join(outDir, 'background.js'), { force: true });
 
       fs.cpSync(pwaDir, outDir, { recursive: true });
 

@@ -19,6 +19,7 @@ While no code from Flame or SUI has been used, the visual design is heavily insp
 - Theme customization (light, dark, vibrant)
 - Import/export your configuration
 - Option to open links in new tabs
+- Opens as your new tab page, or on demand from the toolbar button
 
 # Use it Online
 

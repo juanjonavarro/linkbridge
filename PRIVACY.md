@@ -40,7 +40,9 @@ All three are local browser storage. Nothing is sent anywhere.
 
 LinkBridge requests exactly one permission: **`storage`**, which is what lets it save your
 links and settings on your device. It replaces the new tab page, which is declared through
-`chrome_url_overrides` and is not a permission that grants access to any data.
+`chrome_url_overrides` and is not a permission that grants access to any data. Its toolbar
+button opens the dashboard in a new tab; opening a tab needs no permission either, and
+LinkBridge never reads the tabs you already have open.
 
 It requests no host permissions, so it cannot read or modify any website you visit.
 
