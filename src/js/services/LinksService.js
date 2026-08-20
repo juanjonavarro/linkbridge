@@ -78,7 +78,7 @@ export function LinksService(configService, storageService) {
                                 ${group.links.length === 0 ?
                         `<li class="link drop-zone" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="0"></li>`
                         : group.links.filter(link => linkMatchesFilter(link)).map((link, linkIndex) => `<li class="link" data-category="${type}" data-groupidx="${groupIndex}" data-linkidx="${linkIndex}">
-                                    <a href="#" class="drag-handle config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-grip-vertical"></use></svg></a>
+                                    <a href="#" title="Move link" class="drag-handle config-element"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-grip-vertical"></use></svg></a>
                                     <a href="${esc(safeUrl(link.url))}" class="link-element">
                                         ${safeIconData(link.icon_data) ? `<img src="${esc(safeIconData(link.icon_data))}" class="link-icon">` : ''}
                                         <div class="link-body">

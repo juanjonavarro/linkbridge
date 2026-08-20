@@ -11,6 +11,7 @@ export function EditLinkService() {
     const editLinkSaveButton = document.getElementById('edit-link-save');
     const editLinkCancelButton = document.getElementById('edit-link-cancel');
     const editLinkDeleteButton = document.getElementById('edit-link-delete');
+    const editLinkMoveButton = document.getElementById('edit-link-move');
     const editLinkIconFileInput = document.getElementById('edit-link-icon-file');
     const currentIconContainer = document.getElementById('current-icon-container');
     const currentIconPlaceholder = document.getElementById('current-icon-placeholder');
@@ -252,9 +253,11 @@ export function EditLinkService() {
                 link.icon_data = item.icon_data;
 
                 editLinkDeleteButton.style.display = 'inline-block';
+                editLinkMoveButton.style.display = '';
                 titleElement.textContent = "Edit Link";
             } else {
                 editLinkDeleteButton.style.display = 'none';
+                editLinkMoveButton.style.display = 'none';
                 titleElement.textContent = "New Link";
             }
 

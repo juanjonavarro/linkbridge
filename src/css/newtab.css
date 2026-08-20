@@ -372,6 +372,51 @@ a {
     border-radius: 10px;
 }
 
+/* Move mode. Touch never fires HTML5 drag & drop, so a link can also be picked
+   up by tapping its handle and dropped by tapping the destination. */
+
+#move-hint {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-size);
+    padding: calc(var(--gap-size) / 2);
+    background-color: rgb(var(--secondary-color));
+    color: rgb(var(--background-color));
+}
+
+/* display: flex above would otherwise defeat the [hidden] attribute. */
+#move-hint[hidden] {
+    display: none;
+}
+
+/* It is fixed to the same corner as the hint bar, and during a move the only
+   button that matters is Cancel. */
+#app.move-mode #config-button {
+    display: none;
+}
+
+#app.move-mode .links-section-list li.link {
+    outline: 1px dashed rgba(var(--primary-color), .4);
+    border-radius: 10px;
+}
+
+#app.move-mode .links-section-list li.link.moving {
+    outline: 2px solid rgba(var(--secondary-color), .8);
+}
+
+/* On a device that fires hover, the pencil showing up under the finger reads as
+   "edit this", which is the wrong offer while a destination is being picked.
+   Kept at opacity 0 rather than hidden so nothing reflows. */
+#app.move-mode .links-section-list .links-group li:hover .link-edit {
+    opacity: 0;
+}
+
 .links-section-list a.add-link {
     margin-left: .2em;
     color: rgba(var(--primary-color), .9);
@@ -632,6 +677,34 @@ a {
 
 :modal::backdrop {
   background-color: rgba(0, 0, 0, 0.5); /* oscuro y translúcido */
+}
+
+:modal .dialog-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap-size);
+}
+
+/* Second way in to the move mode, for people who reach for the link itself
+   instead of the handle. Hidden when the dialog is creating a new link.
+   The foreground colour reads as white on the dark themes and stays legible on
+   the light ones, where a literal white would vanish into the dialog. */
+:modal #edit-link-move {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--gap-size) / 4);
+    flex: 0 0 auto;
+    background: transparent;
+    color: rgb(var(--primary-color));
+    border: 1px dashed rgba(var(--primary-color), .6);
+    border-radius: calc(var(--gap-size) / 2);
+    padding: calc(var(--gap-size) / 4) calc(var(--gap-size) / 2);
+    text-decoration: none;
+}
+
+:modal #edit-link-move:hover, :modal #edit-link-move:focus {
+    border-color: rgb(var(--primary-color));
 }
 
 :modal .dialog-input {
