@@ -16,10 +16,14 @@ While no code from Flame or SUI has been used, the visual design is heavily insp
 # Features
 
 - Organize bookmarks into grouped categories
+- Search bar that filters as you type. Press Enter to open the first match
 - Theme customization (light, dark, vibrant)
 - Import/export your configuration
+- Export the whole dashboard as a single HTML file you can use as your home page
 - Option to open links in new tabs
 - Opens as your new tab page, or on demand from the toolbar button
+- Mobile friendly: the layout adapts to small screens and everything works by touch
+- Also available as a web app you can install and use offline, phone included
 
 # Use it Online
 
@@ -31,6 +35,11 @@ Export/Import).
 
 It is a progressive web app: after the first visit it keeps working with no connection, and your
 browser will offer to install it as a standalone app.
+
+You can also host it yourself: download the web app zip from the
+[Releases](https://github.com/juanjonavarro/linkbridge/releases) page and unpack it wherever your
+server serves static files from, a subdirectory included. There is nothing to configure and no
+backend to run, it is only static files, and your links stay in your browser just the same.
 
 # Install from Stores
 
