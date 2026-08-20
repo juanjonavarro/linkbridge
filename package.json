@@ -14,9 +14,11 @@
   "keywords": [],
   "scripts": {
     "build": "vite build --mode prod",
+    "build:pwa": "vite build --mode pwa",
     "dev": "vite build --mode dev",
     "watch": "vite build --mode dev --watch",
-    "serve": "vite preview --port 4321"
+    "serve": "vite preview --port 4321",
+    "serve:pwa": "vite preview --mode pwa --port 4322"
   },
   "devDependencies": {
     "bootstrap-icons": "1.13.1",

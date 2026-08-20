@@ -28,6 +28,9 @@ home page without installing the extension. Configuration is stored in the brows
 version and the extension keep separate sets of links (you can move them across with
 Export/Import).
 
+It is a progressive web app: after the first visit it keeps working with no connection, and your
+browser will offer to install it as a standalone app.
+
 # Install from Stores
 
 - Chrome Web Store: [Add to Chrome](https://chromewebstore.google.com/detail/linkbridge/demgmcklmnnacjoonalgdhmpjmhekhjp)
@@ -39,6 +42,9 @@ Export/Import).
 - Clone the repository
 - Run `npm install`
 - Run `npm run dev` (development build/unpacked) or `npm run build` (production build/packed)
+- `npm run build:pwa` builds the web app instead, into `dist_pwa`: same code, plus the web app
+  manifest and the service worker that make it installable and available offline, and without the
+  extension manifest. Serve it with `npm run serve:pwa` (port 4322)
 - While iterating, `npm run watch` runs the development build and rebuilds `dist` on every save
   (you still need to reload the extension in the browser to pick up the changes)
 - You can serve the application locally with `npm run serve` (port 4321, no extension)

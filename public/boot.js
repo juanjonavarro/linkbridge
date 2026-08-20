@@ -1,7 +1,14 @@
 // Runs while the document is still parsing, before the first paint, so the page never
 // paints untethemed. It must be a separate file: the default MV3 content security
 // policy blocks inline scripts in extension pages.
-//
+
+window.LINKBRIDGE_SURFACE =
+    location.protocol === 'chrome-extension:' ||
+    location.protocol === 'moz-extension:' ||
+    location.protocol === 'safari-web-extension:'
+        ? 'extension'
+        : 'web';
+
 // This is a CACHE, never a source of truth. StorageService owns the real values
 // (chrome.storage in the extension, IndexedDB in the web app) and overwrites whatever
 // this sets a few milliseconds later. If the keys are missing, stale or unreadable,

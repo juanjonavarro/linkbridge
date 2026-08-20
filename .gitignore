@@ -1,4 +1,5 @@
 /dist/
+/dist_pwa/
 /node_modules/
 /.idea/
 /local/

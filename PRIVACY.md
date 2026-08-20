@@ -49,6 +49,13 @@ It requests no host permissions, so it cannot read or modify any website you vis
 LinkBridge makes no network requests. Fonts, interface icons, and the starter link set are
 all bundled inside the extension package and loaded from it.
 
+The web app at [linkbridge.juanjonavarro.com](https://linkbridge.juanjonavarro.com/) is the
+same application served over HTTP, so downloading it is a request to that server like any
+other page. It installs a service worker that keeps a copy of those same bundled files in
+the browser, which is what lets it open with no connection; the browser checks that server
+now and then for a newer copy. Nothing else is ever requested, and nothing about you is
+ever sent — not to that server, not to anyone.
+
 There is one place where a third-party site is involved, and it is worth stating plainly:
 the **"find icon"** link in the link editor opens
 [dashboardicons.com](https://dashboardicons.com) in a new tab, passing the link name you

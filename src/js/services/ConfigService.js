@@ -45,37 +45,8 @@ export function ConfigService(storageService, configClickedCallback = () => { })
     });
 
     aboutLink.addEventListener('click', () => {
-        InfoDialogService().open("About this extension", `
-            <p>
-              This browser extension was created by <a href="https://www.juanjonavarro.com" target="_blank">Juanjo Navarro</a>.
-            </p>
-            <p>
-              I created it inspired by <a href="https://github.com/pawelmalak/flame" target="_blank">Flame</a>, which in turn was inspired by 
-              <a href="https://github.com/jeroenpardon/sui" target="_blank">SUI</a>.
-            </p>
-            <p>
-              As a frequent user of Flame, I wanted to create a version that anyone, even without technical knowledge, could enjoy directly, without needing to set up a server.
-            </p>
-            <p>
-              While no code from Flame or SUI has been used, the visual design is strongly inspired by both projects.
-            </p>
-            <p>
-              LinkBridge collects nothing: no accounts, no analytics and no network requests. Your links and settings
-              never leave this device. Read the
-              <a href="https://github.com/juanjonavarro/linkbridge/blob/main/PRIVACY.md" target="_blank">privacy policy</a>.
-            </p>
-            <p>
-              It is also available as a web app at
-              <a href="https://linkbridge.juanjonavarro.com/" target="_blank">linkbridge.juanjonavarro.com</a>,
-              handy to use it as the home page of a browser where the extension is not installed.
-            </p>
-            <p>
-              The source code lives at
-              <a href="https://github.com/juanjonavarro/linkbridge" target="_blank">github.com/juanjonavarro/linkbridge</a>.
-            </p>
-        `);
+        InfoDialogService().open("About LinkBridge", aboutMessage());
     });
-
 
     return {
         get: getConfiguration,
@@ -90,6 +61,61 @@ export function ConfigService(storageService, configClickedCallback = () => { })
     }
 
 
+
+    // The About dialog is the same text on both surfaces save for one paragraph: each
+    // one points at the other. window.LINKBRIDGE_SURFACE is decided in public/boot.js.
+    function aboutMessage() {
+        const head = `
+            <p>
+              LinkBridge was created by <a href="https://www.juanjonavarro.com" target="_blank">Juanjo Navarro</a>.
+            </p>
+            <p>
+              I created it inspired by <a href="https://github.com/pawelmalak/flame" target="_blank">Flame</a>, which in turn was inspired by 
+              <a href="https://github.com/jeroenpardon/sui" target="_blank">SUI</a>.
+            </p>
+            <p>
+              As a frequent user of Flame, I wanted to create a version that anyone, even without technical knowledge, could enjoy directly, without needing to set up a server.
+            </p>
+            <p>
+              While no code from Flame or SUI has been used, the visual design is strongly inspired by both projects.
+            </p>
+        `;
+
+        const perSurface = {
+            extension: `
+                <p>
+                  LinkBridge also runs as a web app at
+                  <a href="https://linkbridge.juanjonavarro.com/" target="_blank">linkbridge.juanjonavarro.com</a>,
+                  handy as the home page of a browser where you would rather not install the extension.
+                  It keeps its own separate set of links.
+                </p>
+            `,
+            web: `
+                <p>
+                  LinkBridge is also a browser extension that replaces the new tab page in
+                  <a href="https://github.com/juanjonavarro/linkbridge#install-from-stores" target="_blank">Chrome, Firefox and Edge</a>.
+                  It keeps its own separate set of links.
+                </p>
+                <p>
+                  You can also install this page as an app from your browser menu. It works offline either way.
+                </p>
+            `
+        };
+
+        const tail = `
+            <p>
+              LinkBridge collects nothing: no accounts, no analytics and no tracking. Your links and settings
+              never leave this device. Read the
+              <a href="https://github.com/juanjonavarro/linkbridge/blob/main/PRIVACY.md" target="_blank">privacy policy</a>.
+            </p>
+            <p>
+              The source code lives at
+              <a href="https://github.com/juanjonavarro/linkbridge" target="_blank">github.com/juanjonavarro/linkbridge</a>.
+            </p>
+        `;
+
+        return head + (perSurface[window.LINKBRIDGE_SURFACE] ?? perSurface.web) + tail;
+    }
 
     function init(config) {
         setConfiguration(config);
