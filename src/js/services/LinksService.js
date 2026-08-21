@@ -207,7 +207,7 @@ export function LinksService(configService, storageService) {
         drawLinks();
     }
 
-    function loadLinks() {
+    function loadLinks(persist = false) {
         storageService.get(['configuration'], (data) => {
             if (data.configuration && data.configuration.theme) {
                 configService.changeTheme(data.configuration.theme);
@@ -276,10 +276,13 @@ export function LinksService(configService, storageService) {
                     loadImages(images);
                     drawLinks();
 
-                    // Only the first run needs to persist: it is the only path where the data
-                    // (default links and images) does not come from storage.
+                    // The first run is the only path where the data (default links and
+                    // images) does not come from storage, so it is the only one that
+                    // needs the config saved too.
                     if (isFirstRun) {
                         configService.saveConfig();
+                    }
+                    if (isFirstRun || persist) {
                         saveLinks();
                     }
                 });
@@ -361,11 +364,12 @@ export function LinksService(configService, storageService) {
             for (const group of groups) {
                 for (const link of group.links) {
                     if (link.icon_id && link.icon_id.startsWith('image:')) {
-                        for (const image of images) {
-                            if (image.id === link.icon_id) {
-                                link.icon_data = image.data;
-                                break;
-                            }
+                        const image = images.find(image => image.id === link.icon_id);
+                        if (image && image.data) {
+                            link.icon_data = image.data;
+                        } else {
+                            link.icon_id = null;
+                            link.icon_data = null;
                         }
                     } else {
                         link.icon_data = null;

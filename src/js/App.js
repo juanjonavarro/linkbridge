@@ -22,7 +22,7 @@ export function app_interface() {
     MoveLinksService(configService, linksService);
     const importExportService = ImportExportService(configService, storageService);
 
-    configService.setImportAction(() => importExportService.importLinks(() => linksService.loadLinks()));
+    configService.setImportAction(() => importExportService.importLinks(() => linksService.loadLinks(true)));
     configService.setExportAction(() => importExportService.exportLinks());
     configService.setExportHtmlAction(() => importExportService.exportHtml());
 
