@@ -235,6 +235,10 @@ a {
     border-bottom: 1px solid rgba(var(--secondary-color), 1);
 }
 
+#search-bar::-webkit-search-cancel-button {
+    appearance: none;
+}
+
 /* Configuration */
 
 #config-zone {
