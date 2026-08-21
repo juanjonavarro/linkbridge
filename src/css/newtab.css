@@ -287,6 +287,7 @@ a {
     left: auto;
     right: var(--gap-size);
     cursor: pointer;
+    margin: 0;
     background-color: rgba(var(--secondary-color), .4);
     border-radius: 50%;
     padding: .1em;
@@ -297,11 +298,16 @@ a {
     line-height: 1;
     box-sizing: content-box;
     font-size: 2em;
-    transition: all .3s ease;
+    transition: background-color .3s ease;
 }
 
 #config-button:hover, #config-button:focus, #app.config-mode #config-button {
     background-color: rgb(var(--secondary-color));
+}
+
+#config-button:focus-visible {
+    outline: 2px solid rgb(var(--primary-color));
+    outline-offset: 2px;
 }
 
 

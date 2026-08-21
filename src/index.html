@@ -78,12 +78,12 @@
         
         <!-- Non-modal on purpose: a modal <dialog> would swallow the tap that
              picks the destination, which is the whole point of the move mode. -->
-        <div id="move-hint" hidden>
+        <div id="move-hint" role="status" hidden>
             <span>Choose where to move the link</span>
             <button type="button" id="move-cancel">Cancel</button>
         </div>
 
-        <a id="config-button"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-gear-fill"></use></svg></a>
+        <button type="button" id="config-button" aria-label="Configuration"><svg class="icon" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><use href="#icon-gear-fill"></use></svg></button>
     </div>  
     
     <dialog id="edit-link-dialog">
