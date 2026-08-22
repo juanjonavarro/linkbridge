@@ -208,6 +208,15 @@ export function ConfigService(storageService, configClickedCallback = () => { })
             // longer exists on every load.
             storageService.setBootCache('theme-cached', null);
         }
+
+        applyThemeColor();
+    }
+
+    function applyThemeColor() {
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) {
+            meta.content = `rgb(${getComputedStyle(body).getPropertyValue('--background-color').trim()})`;
+        }
     }
 
 }

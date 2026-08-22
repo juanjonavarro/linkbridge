@@ -33,6 +33,11 @@ try {
         }
     }
 
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+        meta.content = 'rgb(' + getComputedStyle(document.body).getPropertyValue('--background-color').trim() + ')';
+    }
+
     var title = localStorage.getItem('linkbridge:title-cached');
     if (title) {
         document.title = title;
