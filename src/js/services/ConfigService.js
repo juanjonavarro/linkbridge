@@ -44,7 +44,8 @@ export function ConfigService(storageService, configClickedCallback = () => { })
         saveConfig();
     });
 
-    aboutLink.addEventListener('click', () => {
+    aboutLink.addEventListener('click', (event) => {
+        event.preventDefault();
         InfoDialogService().open("About LinkBridge", aboutMessage());
     });
 
