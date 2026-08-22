@@ -46,9 +46,7 @@ function generateManifest() {
 //   - and NOT public/manifest.json, which is the extension manifest and has no business
 //     being served over HTTP.
 //
-// The service worker deliberately does not call skipWaiting(): a new version is picked up
-// the next time every tab of the app has been closed, instead of swapping the code under a
-// page that is already open. For a page you open fifty times a day that is soon enough.
+// The service worker DOES call skipWaiting(), and serves the network first.
 function generatePwa() {
   const pwaDir = resolve(__dirname, 'pwa');
   const outDir = resolve(__dirname, 'dist_pwa');
@@ -94,7 +92,12 @@ const CACHE = PREFIX + '${cacheVersion}';
 const ASSETS = ${JSON.stringify(assets, null, 4)};
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)));
+    event.waitUntil(
+        caches.open(CACHE).then((cache) => cache.addAll(
+            ASSETS.map((asset) => new Request(asset, { cache: 'reload' }))
+        ))
+    );
+    self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
@@ -114,20 +117,51 @@ self.addEventListener('activate', (event) => {
 // nasty: offline, the stylesheet loads and the app does not.
 const MATCH = { ignoreVary: true };
 
+// How long a launch may wait for the network before the cached copy answers instead. 
+const NETWORK_TIMEOUT_MS = 1000;
+
+// A hashed name cannot change contents without changing its URL, so the copy in the cache
+// IS the copy on the server: no request, no race, nothing to wait for. Everything else can
+// change underneath the same URL —index.html, boot.js, the manifest, the icons— and that is
+// what the race below is for. Keeps a warm launch down to a couple of requests.
+function isHashed(url) {
+    return new URL(url).pathname.includes('/assets/');
+}
+
+// Network first, cache as the offline fallback and as the answer when the network is too
+// slow to be useful. Nothing is written back on the way past: this cache is a snapshot of
+// one build, and any change to any file —even an unhashed one— changes the digest in CACHE,
+// which brings a new worker that precaches the lot again.
+async function respond(request) {
+    // A navigation is always the app itself: the address may carry anything (a query
+    // string, a deep path behind a rewrite) but what has to be served is index.html.
+    const key = request.mode === 'navigate' ? './index.html' : request;
+
+    if (isHashed(request.url)) {
+        return (await caches.match(key, MATCH)) || fetch(request);
+    }
+
+    // Started before the cache is even consulted, on purpose: the lookup must not delay the
+    // request that the whole strategy depends on.
+    const network = fetch(request, { cache: 'no-cache' });
+    const cached = await caches.match(key, MATCH);
+
+    // Nothing to fall back to, so there is nothing to race either: this one waits.
+    if (!cached) return network;
+
+    return Promise.race([
+        network.catch(() => cached),
+        new Promise((resolve) => setTimeout(() => resolve(cached), NETWORK_TIMEOUT_MS))
+    ]);
+}
+
 self.addEventListener('fetch', (event) => {
     const request = event.request;
 
     if (request.method !== 'GET') return;
     if (new URL(request.url).origin !== self.location.origin) return;
 
-    // A navigation is always the app itself: the address may carry anything (a query
-    // string, a deep path behind a rewrite) but what has to be served is index.html.
-    if (request.mode === 'navigate') {
-        event.respondWith(caches.match('./index.html', MATCH).then((cached) => cached || fetch(request)));
-        return;
-    }
-
-    event.respondWith(caches.match(request, MATCH).then((cached) => cached || fetch(request)));
+    event.respondWith(respond(request));
 });
 `;
 }
